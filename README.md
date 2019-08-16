@@ -5,6 +5,7 @@ First call agenda:
 1. Linter tool
 2. Git branch strategy
 3. Project environment
+4. Python version 
 
 
 Poll results:
