@@ -7,6 +7,7 @@ First call agenda:
 3. Project environment
 4. Python version
 5. Pytest/unitest/nose
+6. Podcast language 
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
