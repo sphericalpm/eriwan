@@ -4,6 +4,7 @@ This is a repository for the test task of Spherical Internship August 2019
 First call agenda:
 1. Linter tool
 2. Git branch strategy
+3. Project environment
 
 
 Poll results:
