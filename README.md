@@ -8,4 +8,4 @@ First call agenda:
 
 Poll results:
 1. First meeting time: pending
-2. Communication language: pending
+2. Communication language: Russian
