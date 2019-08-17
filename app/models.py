@@ -41,7 +41,7 @@ class Episode(db.Model):
     # todo: add to celery task
     def generate_wrapped_file(self, upload_file):
         '''
-        Generate file with name of episode prefix from upload_file
+        Return generate file with name of episode prefix from upload_file
         '''
         pass
 
@@ -63,9 +63,15 @@ class Joke(db.Model):
         if os.path.exists(file_path):
             return file_path
 
+    def generate_base_file(self):
+        '''
+        Return generate base audio file from joke_text
+        '''
+        pass
+
     # todo: add to celery task
     def generate_wrapped_file(self, upload_file):
         '''
-        Generate wrapped in jingles file from upload_file
+        Return generate wrapped in jingles file from upload_file
         '''
         pass
