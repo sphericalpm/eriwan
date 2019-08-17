@@ -1,5 +1,6 @@
 from gtts import gTTS
 import os
+import io
 
 
 def text_to_speech(id_or_name, text):
@@ -22,7 +23,11 @@ def text_to_speech(id_or_name, text):
         return
 
     tts = gTTS(text=text, lang='ru')
-    tts.save(file_name)
+    print(type(tts))
+
+    f = io.BytesIO(tts)
+
+    # tts.save(file_name)
 
     return file_name
 
