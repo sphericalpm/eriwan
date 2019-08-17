@@ -107,4 +107,8 @@ venv.bak/
 .envrc
 
 # ideas
+.idea/
 .vscode
+.idea/
+
+app.db

@@ -1,9 +1,7 @@
-# Creates the application object as an instance of class Flask
-
-
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 
 from config import Config
@@ -16,6 +14,9 @@ app.config.from_object(Config)
 # database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# authorization
+login = LoginManager(app)
 
 #styles
 bootstrap = Bootstrap(app)
