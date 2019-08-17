@@ -23,7 +23,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.idea/
 MANIFEST
 
 # PyInstaller
@@ -109,4 +108,6 @@ venv.bak/
 
 # ideas
 .vscode
+.idea/
+
 app.db
