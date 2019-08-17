@@ -2,23 +2,20 @@
 # -*- coding: utf-8 -*-
 #
 
-
-import random
-#from flask_sqlalchemy import SQLAlchemy
-
-#from app import models
+from random import shuffle
 from app.models import Joke
 
 
-def get_all_id():
+def random_joke():
+    ''' this is function return one random id'''
+    all_jokes_id = []
     jokes = Joke.query.all()
     for i in jokes:
-        print(i.joke_text)
+        all_jokes_id.append(i.id)
 
-
-def random_jokes():
-    pass
+    shuffle(all_jokes_id)
+    return all_jokes_id[0]
 
 
 if __name__ == '__main__':
-    get_all_id()
+    random_joke()

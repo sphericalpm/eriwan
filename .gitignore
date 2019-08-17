@@ -108,3 +108,8 @@ venv.bak/
 
 # ideas
 .vscode
+
+# others
+*.pyc
+__pycache__
+*.db
