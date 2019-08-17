@@ -1,8 +1,7 @@
 # Handle route and server exceptions
-# TODO: uncomment db, when it will be create
 from flask import render_template
 from app import app
-# from app db
+from app import db
 
 
 @app.errorhandler(404)
@@ -12,5 +11,5 @@ def not_found_error(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    # db.session.rollback()
+    db.session.rollback()
     return render_template('500.html'), 500
