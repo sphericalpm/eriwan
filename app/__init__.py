@@ -4,6 +4,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 from config import Config
 
@@ -16,6 +17,9 @@ app.config.from_object(Config)
 # database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# authorization
+login_manager = LoginManager(app)
 
 # The routes module is imported at the bottom and not at the top of the script
 # as it is always done. The bottom import is a workaround to circular imports,
