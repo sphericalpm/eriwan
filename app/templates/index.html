@@ -2,5 +2,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h4>{{ feed_blank }}</h4>
+    {{super()}}
+<div class="container">
+    <div class="text-center">
+        <h1>{{ feed_blank }}</h1>
+    </div>
 {% endblock %}
