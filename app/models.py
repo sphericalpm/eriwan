@@ -49,10 +49,10 @@ class Episode(db.Model):
 class Joke(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     joke_text = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'<Episode id: {self.id}>, name: {self.name}'
+        return f'<Joke id: {self.id}>, joke_text: {self.joke_text}'
 
     def get_file_path(self):
         '''
