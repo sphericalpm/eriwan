@@ -17,6 +17,7 @@ app.config.from_object(Config)
 # database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
 # authorization
 login = LoginManager(app)
 # The routes module is imported at the bottom and not at the top of the script
