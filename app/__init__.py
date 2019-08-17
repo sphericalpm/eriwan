@@ -16,7 +16,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # authorization
-login = LoginManager(app)
+login_manager = LoginManager(app)
 
 #styles
 bootstrap = Bootstrap(app)

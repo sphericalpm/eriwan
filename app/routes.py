@@ -1,10 +1,12 @@
-from flask import render_template, url_for, redirect, flash, request
-from flask_login import current_user, login_user, logout_user
-from werkzeug.urls import url_parse
 
+from flask import render_template, url_for, flash, redirect, , request
+from flask_login import current_user, login_user, logout_user
+
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm
+from app.models import User, Joke
 from app import app, db
-from app.forms import UploadJokeForm, LoginForm
-from app.models import Joke, User
+
+from werkzeug.urls import url_parse
 
 
 @app.route('/')
@@ -13,6 +15,23 @@ def index():
     return render_template('index.html', feed_blank=feed_blank)
 
 
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(
+            username=form.username.data,
+            email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash(('Ваш аккаунт успешно создан. Теперь Вы можете войти:'), category='info')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Sign Up', form=form)
+
+  
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -35,11 +54,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-@app.route('/register')
-def register():
-    pass
 
 
 @app.route('/add_joke', methods=['GET', 'POST'])
