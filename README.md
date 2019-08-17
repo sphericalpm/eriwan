@@ -10,6 +10,7 @@ First call agenda:
 6. Podcast language
 7. Code Master
 8. Data Base
+9. Upload file size limits 
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
