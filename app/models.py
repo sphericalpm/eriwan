@@ -33,7 +33,7 @@ class Episode(db.Model):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.STATIC_ROOT, 'episodes')
+        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
         file_path = f'{static_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
