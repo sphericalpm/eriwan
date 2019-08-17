@@ -9,6 +9,7 @@ First call agenda:
 5. Pytest/unitest/nose
 6. Podcast language
 7. Code Master
+8. Data Base
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
