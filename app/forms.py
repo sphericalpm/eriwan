@@ -1,8 +1,8 @@
-# Here will be Flask Web Forms
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo,\
     ValidationError
+
 from app.models import User
 
 
@@ -45,3 +45,15 @@ class RegistrationForm(FlaskForm):
         if email:
             raise ValidationError('Этот почтовый ящик уже занят. Пожалуйста \
             выберите другое.')
+
+            
+class LoginForm(FlaskForm):
+    username = StringField("Имя пользователя", validators=[DataRequired()])
+    password = PasswordField("Пароль", validators=[DataRequired()])
+    remember_me = BooleanField("Запомнить меня")
+    submit = SubmitField("Войти")
+
+
+class UploadJokeForm(FlaskForm):
+    text = StringField('Текст', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
