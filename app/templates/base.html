@@ -17,8 +17,8 @@
 <nav class="nav">
   <a class="nav-link active" href="#">Eriwan</a>
   {% if current_user.is_anonymous %}
-        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-        <a class="nav-link" href="{{ url_for('register') }}">Registration</a>
+        <a class="nav-link" href="{{ url_for('login') }}">Вход</a>
+        <a class="nav-link" href="{{ url_for('register') }}">Регистрация</a>
     {% else %}
         <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
         <a href="{{ url_for('logout') }}">Log out</a>
