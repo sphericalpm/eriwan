@@ -1,1 +1,2 @@
 flask
+flask-wtf==0.14.2
