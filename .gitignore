@@ -93,6 +93,7 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
+yandex_tokens.py
 
 # Rope project settings
 .ropeproject
@@ -107,5 +108,5 @@ venv.bak/
 .envrc
 
 
-# files:
+# audio files:
 *.mp3
