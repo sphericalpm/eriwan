@@ -15,4 +15,4 @@ class Config(object):
     STATIC_ROOT = '/static/'
 
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
-    UPLOAD_PODCAST_FOLDER = os.path.join(basedir, 'uploaded_podcasts')
+    UPLOAD_PODCAST_FOLDER = 'episodes'
