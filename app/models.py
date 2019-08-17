@@ -2,6 +2,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import app, db
+from .utils import concatenate_audios
 
 
 class User(db.Model):
@@ -39,11 +40,20 @@ class Episode(db.Model):
             return file_path
 
     # todo: add to celery task
-    def generate_wrapped_file(self, upload_file):
-        '''
-        Return generate file with name of episode prefix from upload_file
-        '''
-        pass
+    def generate_wrapped_file(self, episode_path, name_path):
+        """
+        Concatenate episode name audio and episode audio
+        :param episode_path: path to episode mp3
+        :param name_path: path to episode name mp3
+        :return:
+        """
+        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
+
+        if not os.path.exists(static_path):
+            os.mkdir(static_path)
+
+        file_path = f'{static_path}/{self.id}.mp3'
+        concatenate_audios([name_path, episode_path], file_path)
 
 
 class Joke(db.Model):
@@ -70,8 +80,17 @@ class Joke(db.Model):
         pass
 
     # todo: add to celery task
-    def generate_wrapped_file(self, upload_file):
-        '''
-        Return generate wrapped in jingles file from upload_file
-        '''
-        pass
+    def generate_wrapped_file(self, joke_path):
+        """
+        generate wrapped in jingles file from joke_path
+        :param joke_path: path to joke mp3
+        :return:
+        """
+        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'jokes')
+        if not os.path.exists(static_path):
+            os.mkdir(static_path)
+
+        file_path = f'{static_path}/{self.id}.mp3'
+        jingle_path = os.path.join(app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3")
+
+        concatenate_audios([jingle_path, joke_path, jingle_path], file_path)

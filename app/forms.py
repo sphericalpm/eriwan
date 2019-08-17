@@ -1,4 +1,3 @@
-# Here will be Flask Web Forms
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
@@ -10,3 +9,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField("Запомнить меня")
     submit = SubmitField("Войти")
 
+
+class UploadJokeForm(FlaskForm):
+    text = StringField('Текст', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')

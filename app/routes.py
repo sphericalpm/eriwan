@@ -1,11 +1,11 @@
-# View functions
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
-from app import app
-from .models import User
-from forms import LoginForm
+from app import app, db
+from app.forms import UploadJokeForm, LoginForm
+from app.models import Joke, User
+
 
 
 @app.route('/')
@@ -41,3 +41,14 @@ def logout():
 @app.route('/register')
 def register():
     pass
+
+  
+  @app.route('/add_joke', methods=['GET', 'POST'])
+def add_joke_template():
+    form = UploadJokeForm()
+    if form.validate_on_submit():
+        new_joke = Joke(joke_text=form.text.data)
+        db.session.add(new_joke)
+        db.session.commit()
+        flash('Шутка добавлена!')
+    return render_template('add_joke.html', form=form)
