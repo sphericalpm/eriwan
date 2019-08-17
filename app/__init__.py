@@ -20,4 +20,4 @@ migrate = Migrate(app, db)
 # The routes module is imported at the bottom and not at the top of the script
 # as it is always done. The bottom import is a workaround to circular imports,
 # a common problem with Flask applications.
-from app import routes, models
+from app import routes, models, errors
