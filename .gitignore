@@ -107,6 +107,17 @@ yandex_tokens.py
 # direnv
 .envrc
 
+# audio files:
+*.mp3
+
+# ideas
+.vscode
+
+<<<<<<< HEAD
 
 # audio files:
 *.mp3
+=======
+# ideas
+.vscode
+>>>>>>> 3d802e7dbd71cd87ba41980551ff0c5687dbc32a
