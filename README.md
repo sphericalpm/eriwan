@@ -7,8 +7,9 @@ First call agenda:
 3. Project environment: optional (majority for flake8)
 4. Python version: 3.7
 5. Pytest/unitest/nose: optional (majority for pytest)
-6. Podcast language
-7. Code Master
+6. Podcast language: Russian 
+7. Code Master: pending
+7.1. Code review: first responder
 8. Data Base
 9. Upload file size limits 
 
