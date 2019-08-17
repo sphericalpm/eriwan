@@ -12,4 +12,4 @@ class Config(object):
 
     ADMINS = ['your-email@example.com']
 
-    STATIC_ROOT = '/static/'
+    STATIC_ROOT = 'static/'
