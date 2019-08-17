@@ -1,6 +1,6 @@
 # Here will be Flask Web Forms
-from flask_wtf import  FlaskForm
-from wtforms import  StringField, PasswordField, BooleanField, SubmitField
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
 
