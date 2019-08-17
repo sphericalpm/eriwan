@@ -12,7 +12,7 @@ def index():
     return render_template('index.html', feed_blank=feed_blank)
 
 
-@app.route('/')
+@app.route('/login')
 def login():
     pass
 
@@ -29,6 +29,6 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash(f'Ваш аккаунт успешно создан. Теперь Вы можете войти:', 'success')
+        flash(('Ваш аккаунт успешно создан. Теперь Вы можете войти:'), category='info')
         return redirect(url_for('login'))
     return render_template('register.html', title='Sign Up', form=form)

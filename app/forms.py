@@ -7,33 +7,29 @@ from app.models import User
 
 
 class RegistrationForm(FlaskForm):
-
     username = StringField(
         'Имя пользователя',
         render_kw={"placeholder": "Ваше имя пользователя"},
         validators=[
             DataRequired(),
             Length(min=2, max=64)])
-
-    email = StringField('Почтовый ящик',
+    email = StringField(
+        'Почтовый ящик',
         render_kw={"placeholder": "you@example.com"},
         validators=[
             DataRequired(),
             Email()])
-
     password = PasswordField(
         'Пароль',
         validators=[
             DataRequired(),
             Length(min=3, max=25)])
-
     confirm_password = PasswordField(
         'Подтверждение пароля',
         validators=[
             DataRequired(),
             Length(min=3, max=25),
             EqualTo('password')])
-
     submit = SubmitField('Зарегистрироваться')
 
     @staticmethod
