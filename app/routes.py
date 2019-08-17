@@ -7,7 +7,6 @@ from app.forms import UploadJokeForm, LoginForm
 from app.models import Joke, User
 
 
-
 @app.route('/')
 def index():
     feed_blank = 'Podcast Main page: RSS feed'
@@ -42,8 +41,8 @@ def logout():
 def register():
     pass
 
-  
-  @app.route('/add_joke', methods=['GET', 'POST'])
+
+@app.route('/add_joke', methods=['GET', 'POST'])
 def add_joke_template():
     form = UploadJokeForm()
     if form.validate_on_submit():
