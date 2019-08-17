@@ -29,3 +29,8 @@ Poll results:
 
 
 3. Communication language: Russian
+
+
+### Dependencies
+ - ffmpeg:  
+`sudo apt install ffmpeg`
