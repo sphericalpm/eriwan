@@ -11,6 +11,7 @@ First call agenda:
 6.1. Code review: first responder
 7. Data Base: Sqlite
 8. Flask
+9. Queue: celery?
 10. Upload file size limits: 20 Megabytes
 11. Audio file format: mp3?
 12. Frontend: Bootsrap + jinja
