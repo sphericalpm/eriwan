@@ -3,7 +3,7 @@ from flask import render_template, url_for, redirect
 from werkzeug.datastructures import CombinedMultiDict
 from flask import request
 from werkzeug.utils import secure_filename
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from app import app
 from .forms import FileUploadForm
@@ -18,6 +18,7 @@ def index():
     return render_template('index.html', feed_blank=feed_blank, form=form)
 
 
+@login_required
 @app.route('/upload-podcast', methods=['POST'])
 def upload_file():
     form = FileUploadForm(CombinedMultiDict((request.files, request.form)))
