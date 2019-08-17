@@ -10,10 +10,13 @@ First call agenda:
 6. Podcast language: Russian 
 7. Code Master: pending
 7.1. Code review: first responder
-8. Data Base
-9. Upload file size limits 
+8. Data Base: Sqlite
+9. Flask
+10. Upload file size limits 
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
 2. Second meeting saturday 19.00 (GMT+3)
-2. Communication language: Russian
+
+
+3. Communication language: Russian
