@@ -1,6 +1,5 @@
 from gtts import gTTS
 import os
-import io
 
 
 def text_to_speech(id_or_name, text):
@@ -23,11 +22,7 @@ def text_to_speech(id_or_name, text):
         return
 
     tts = gTTS(text=text, lang='ru')
-    print(type(tts))
-
-    f = io.BytesIO(tts)
-
-    # tts.save(file_name)
+    tts.save(file_name)
 
     return file_name
 
@@ -40,8 +35,8 @@ def check_and_create_file_dir(jokes_dir, episodes_dir):
     if not os.path.exists(jokes_dir):
         os.makedirs(jokes_dir)
     if not os.path.exists(episodes_dir):
-        os.makedirs(episodes_dir)
-
+            os.makedirs(episodes_dir)
+    
 
 if __name__ == "__main__":
     text = "Армянская семья так любила извиняться, что взяла фамилию Сорян."
