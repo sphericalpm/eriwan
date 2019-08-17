@@ -16,6 +16,10 @@ First call agenda:
 11. Audio file format: mp3?
 12. Frontend: Bootsrap + jinja
 
+Podcast structure:
+1st audio: jingle + joke + jungle 
+2nd audio: name of episode + episode
+
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
