@@ -17,7 +17,10 @@ def random_joke():
             all_jokes_id.append(i.id)
 
     shuffle(all_jokes_id)
-    return all_jokes_id[0]
+    random_id = all_jokes_id[0]
+    a = Joke.query.filter_by(id=random_id).first()
+    #print(a.joke_text)
+    return a.joke_text
 
 
 if __name__ == '__main__':
