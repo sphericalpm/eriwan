@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 beautifulsoup4==4.8.0
 bs4==0.0.1
 certifi==2019.6.16
@@ -16,3 +17,15 @@ requests==2.22.0
 six==1.12.0
 soupsieve==1.9.2
 urllib3==1.25.3
+=======
+# core
+Flask ~= 1.1.1
+
+# database
+Flask-SQLAlchemy ~= 2.4.0
+flask-migrate ~= 2.5.2
+
+# merge audio
+pydub
+
+>>>>>>> ed1a20b356baef7297976ed2ce1ea3d67f5d7243
