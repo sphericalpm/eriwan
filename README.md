@@ -7,18 +7,19 @@ First call agenda:
 3. Project environment: optional (majority for flake8)
 4. Python version: 3.7
 5. Pytest/unitest/nose: optional (majority for pytest)
-6. Podcast language: Russian 
-7. Code Master: pending
-7.1. Code review: first responder
-8. Data Base: Sqlite
-9. Flask
+6. Code Master: pending
+6.1. Code review: first responder
+7. Data Base: Sqlite
+8. Flask
 10. Upload file size limits: 20 Megabytes
 11. Audio file format: mp3?
 12. Frontend: Bootsrap + jinja
 
 Podcast structure:
-1st audio: jingle + joke + jungle 
-2nd audio: name of episode + episode
+1. 1st audio: jingle + joke + jungle;
+2. 2nd audio: name of episode + episode
+3. Podcast language: Russian
+4. Speech synthesis: Gtts
 
 
 Poll results:
