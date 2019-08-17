@@ -108,3 +108,4 @@ venv.bak/
 
 # ideas
 .vscode
+app.db
