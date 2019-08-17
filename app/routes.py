@@ -1,8 +1,12 @@
 # View functions
+<<<<<<< HEAD
 from flask import render_template, redirect, url_for
 from werkzeug.datastructures import CombinedMultiDict
 from flask import request
 
+=======
+from flask import render_template, url_for
+>>>>>>> dev
 from app import app
 from .forms import FileUploadForm
 

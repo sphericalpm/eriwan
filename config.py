@@ -11,3 +11,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     ADMINS = ['your-email@example.com']
+
+    STATIC_ROOT = '/static/'

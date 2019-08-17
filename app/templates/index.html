@@ -1,2 +1,7 @@
-{{ feed_blank }}
-{% include 'upload_form.html' %}
+<!-- HERE WILL BE MAIN PAGE-->
+{% extends "base.html" %}
+
+{% block content %}
+    <h4>{{ feed_blank }}</h4>
+    {% include 'upload_form.html' %}
+{% endblock %}
