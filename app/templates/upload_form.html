@@ -1,0 +1,6 @@
+<form action="/upload-podcast" method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}<br>
+    {{ form.file }}
+    <span class="validation_error">{{ ', '.join(form.file.errors) }}</span><br>
+    <p><input type="submit"></p><br>
+</form>
