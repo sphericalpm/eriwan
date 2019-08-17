@@ -12,7 +12,9 @@ First call agenda:
 7.1. Code review: first responder
 8. Data Base: Sqlite
 9. Flask
-10. Upload file size limits 
+10. Upload file size limits
+11. Bootsrap + jinja
+
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
