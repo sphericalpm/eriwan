@@ -19,7 +19,7 @@ Podcast structure:
 1. 1st audio: jingle + joke + jungle;
 2. 2nd audio: name of episode + episode
 3. Podcast language: Russian
-4. Speech synthesis: Gtts
+4. Speech synthesis: gTTS
 
 
 Poll results:
