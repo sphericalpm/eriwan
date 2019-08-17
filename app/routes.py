@@ -1,12 +1,8 @@
 # View functions
-<<<<<<< HEAD
-from flask import render_template, redirect, url_for
+from flask import render_template, url_for, redirect
 from werkzeug.datastructures import CombinedMultiDict
 from flask import request
 
-=======
-from flask import render_template, url_for
->>>>>>> dev
 from app import app
 from .forms import FileUploadForm
 
@@ -24,4 +20,3 @@ def upload_file():
     if form.validate():
         return redirect(url_for('index'))
     return render_template('index.html', form=form)
-
