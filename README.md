@@ -13,7 +13,7 @@ First call agenda:
 8. Data Base: Sqlite
 9. Flask
 10. Upload file size limits
-11. Bootsrap + jinja
+11. Frontend: Bootsrap + jinja
 
 
 Poll results:
