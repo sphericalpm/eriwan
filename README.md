@@ -15,4 +15,5 @@ First call agenda:
 
 Poll results:
 1. First meeting time: 10:00 (GMT+3)
+2. Second meeting saturday 19.00 (GMT+3)
 2. Communication language: Russian
