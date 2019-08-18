@@ -7,6 +7,7 @@ from werkzeug.datastructures import CombinedMultiDict
 
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm, EpisodeUploadForm
 from app.models import User, Joke, Episode
+from app.rss import RssPodcast
 from app import app, db
 from app.utils import admin_required
 
@@ -172,3 +173,18 @@ def edit_profile(username):
     elif request.method == "GET":
         form.username.data = user.username
     return render_template('edit_joke.html', form=form)
+
+
+@app.route('/feed')
+def feed_view():
+    """
+    comparing rss file and database for Episodes
+    and generate new rss file, or not
+    :return: template.xml
+    """
+    p = RssPodcast()
+    if p.are_not_equal():
+        p.sync_episodes()
+        p.rss_file(p.file.as_posix())
+    return render_template('feed_template.xml')
+

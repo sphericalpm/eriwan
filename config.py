@@ -14,6 +14,9 @@ class Config(object):
 
     STATIC_ROOT = 'app/static/'
     MEDIA_ROOT = 'media/'
+
+    HOST = os.environ.get('HOST', 'localhost:5000')
+    
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
     UPLOAD_PODCAST_FOLDER = 'episodes'
 
