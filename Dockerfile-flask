@@ -13,6 +13,8 @@ EXPOSE 5000
 # Copy the requirements file in order to install
 # Python dependencies
 COPY requirements.txt .
+# App dependencies
+RUN apt-get install ffmpeg
 # Install Python dependencies
 RUN pip install -r requirements.txt
 # We copy the rest of the codebase into the image
