@@ -12,7 +12,7 @@ class Config(object):
 
     ADMINS = ['your-email@example.com']
 
-    STATIC_ROOT = '/static/'
+    STATIC_ROOT = 'static/'
     MEDIA_ROOT = 'media/'
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
     UPLOAD_PODCAST_FOLDER = 'episodes'
@@ -28,3 +28,4 @@ class Config(object):
     DROPZONE_UPLOAD_ON_CLICK = True,
     DROPZONE_UPLOAD_ACTION = 'upload_podcast_handle'  # URL or endpoint
     UNREGISTER_USER = 'Только зарегестрированные пользователи могу загружать подкасты'
+
