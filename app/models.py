@@ -7,7 +7,6 @@ from flask_login import UserMixin
 from app import app, db, login_manager
 from .audio_utils import concatenate_audios, text_to_speech
 
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True,
@@ -73,7 +72,7 @@ class Joke(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'<Joke id: {self.id}>, name: {self.joke_text}'
+        return f'<Joke id: {self.id}>, name: {self.name}'
 
     def jingle_file_path(self):
         return os.path.join(
@@ -100,7 +99,7 @@ class Joke(db.Model):
             os.makedirs(media_path)
 
         file_path = text_to_speech(self.joke_text)
-        concatenate_audios([self.jingle_file_path,
+        concatenate_audios([self.jingle_file_path(),
                             file_path,
-                            self.jingle_file_path],
+                            self.jingle_file_path()],
                            f'{media_path}/{self.id}.mp3')

@@ -6,7 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile-flask
     volumes:
-      - "./:/app"
+      - ./app/static/jingles:/app/app/static/jingles
+      - ./media:/app/media
+      - ./app.db:/app/app.db
   nginx:
     image: webapp-nginx
     build:
