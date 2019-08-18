@@ -92,10 +92,11 @@ def upload_podcast_handle():
             path = f'{static_path}{upload_folder}'
             if not os.path.exists(path):
                 os.mkdir(path)
-            form.file.data.save(f'{path}/{episode.id}.mp3')
+
             db.session.add(episode)
             db.session.flush()
             db.session.commit()
+            form.file.data.save(f'{path}/{episode.id}.mp3')
     return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
