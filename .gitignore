@@ -115,3 +115,7 @@ media/
 .idea/
 .vscode
 app.db
+
+# xml
+
+.xml
