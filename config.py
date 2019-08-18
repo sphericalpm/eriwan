@@ -13,6 +13,15 @@ class Config(object):
     ADMINS = ['your-email@example.com']
 
     STATIC_ROOT = '/static/'
-    MEDIA_ROOT = '/media/'
+    MEDIA_ROOT = 'media/'
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
     UPLOAD_PODCAST_FOLDER = 'episodes'
+
+    DROPZONE_ALLOWED_FILE_CUSTOM = True
+    DROPZONE_ALLOWED_FILE_TYPE = 'audio/mpeg, .mp3'
+    DROPZONE_DEFAULT_MESSAGE = 'Перетащите аудио файл в эту зону для загрузки'
+    DROPZONE_MAX_FILE_SIZE = 20
+    DROPZONE_INVALID_FILE_TYPE = 'Только аудио файлы в формате mp3'
+    DROPZONE_FILE_TOO_BIG = 'Вы можете загружать файлы не превышающие 20MB'
+    DROPZONE_ENABLE_CSRF = True
+    #DROPZONE_SERVER_ERROR = '"Только зарегестрированные пользователи могу загружать подкасты: {{statusCode}}"'

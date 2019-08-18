@@ -2,6 +2,7 @@
 {% extends "base.html" %}
 {% block styles %}
 {{super()}}
+  {{ dropzone.load_css() }}
   <link rel="stylesheet" href="{{url_for('.static', filename='css/drop_zone_style.css')}}">
 {% endblock %}
 
@@ -10,25 +11,9 @@
 <div class="container">
     <div class="text-center">
         <h1>{{ feed_blank }}</h1>
-        {% include 'upload_form.html' %}
+        {{ dropzone.create(action=url_for('upload_podcast')) }}
+        {{ dropzone.load_js() }}
+        {{ dropzone.config() }}
     </div>
 </div>
 {% endblock %}
-{% block scripts %}
-    {{ super() }}
-    <script src="{{ url_for('static', filename='js/episode_upload/dropzone.js') }}"></script>
-    <script>
-        Dropzone.options.EpisodeDropZone = {
-          paramName: "file", // The name that will be used to transfer the file
-          maxFilesize: 20, // MB
-          dictDefaultMessage: "Перетащите аудио файл в эту зону для загрузки",
-          accept: function(file, done) {
-            if (file.name == "justinbieber.jpg") {
-              done("Naha, you don't.");
-            }
-            else { done(); }
-          }
-        };
-    </script>
-{% endblock %}
-

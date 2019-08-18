@@ -69,20 +69,23 @@ def add_joke_template():
     return render_template('add_joke.html', form=form)
 
 
-@login_required
 @app.route('/upload-podcast', methods=['POST'])
-def upload_file():
+def upload_podcast():
+    if not current_user.is_authenticated:
+        return 'Только зарегистрированные пользователи могу загружать подкасты', 500
     form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
     if form.validate():
+        print('reg', request.files, request.form)
         filename = secure_filename(form.file.data.filename)
         episode = Episode(
             name=filename.rstrip('.mp3'),
-            user_id=current_user.get_id()
+            #user_id=current_user.get_id()
         )
         upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
-        static_path = app.config['STATIC_ROOT']
-        form.file.data.save(f'{static_path}{upload_folder}/{episode.id}')
+        static_path = app.config['MEDIA_ROOT']
+        form.file.data.save(f'{static_path}{upload_folder}/1.mp3')
         db.session.add(episode)
         db.session.commit()
+        flash("File upload")
         return redirect(url_for('index'))
     return render_template('index.html', form=form)
