@@ -6,7 +6,7 @@
 {% block navbar %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Eriwan Podcast</a>
+        <a class="navbar-brand" href="/">Eriwan Podcast</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -25,12 +25,16 @@
                     {% if current_user.is_authenticated %} 
                     <li>
                         <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"> Профиль</a>
-                    </li> 
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ url_for('upload_podcast_handle', username=current_user.username) }}">Загрузить подкаст</a>
+                    </li>
                     {% endif %}
             </li>
             <li class="nav-item my-2 my-sm-0" >
                 {% if current_user.is_anonymous %}
                     <a class="nav-link" a href="{{ url_for('login') }}">Войти</a>
+                    <a class="nav-link" a href="{{ url_for('register') }}">Войти</a>
                 {% else %}
                     <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
                 {% endif %}
@@ -56,4 +60,6 @@
         {% endwith %}
 {% endblock %}
 {% block footer %}
+{% endblock %}
+{% block scripts %}
 {% endblock %}
