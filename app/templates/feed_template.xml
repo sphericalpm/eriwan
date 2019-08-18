@@ -7,14 +7,54 @@
     <itunes:explicit>yes</itunes:explicit>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>python-podgen v1.0.0 https://podgen.readthedocs.org</generator>
-    <lastBuildDate>Sun, 18 Aug 2019 17:45:34 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 18 Aug 2019 18:53:47 +0000</lastBuildDate>
     <item>
       <title>test</title>
-      <link>/media/episodes//1.mp3</link>
-      <itunes:author>&lt;User 111&gt;</itunes:author>
-      <author>123@mail.ru (&lt;User 111&gt;)</author>
-      <guid isPermaLink="false">/media/episodes/1.mp3</guid>
-      <enclosure url="/media/episodes/1.mp3" length="0" type="mp3"/>
+      <link>http://localhost:5000/app/static/1.mp3</link>
+      <itunes:author>111</itunes:author>
+      <author>123@mail.ru (111)</author>
+      <guid isPermaLink="false">http://localhost:5000/app/static/1.mp3</guid>
+      <enclosure url="http://localhost:5000/app/static/1.mp3" length="0" type="mp3"/>
+    </item>
+    <item>
+      <title>Test2</title>
+      <link>http://localhost:5000/app/static/2.mp3</link>
+      <itunes:author>111</itunes:author>
+      <author>123@mail.ru (111)</author>
+      <guid isPermaLink="false">http://localhost:5000/app/static/2.mp3</guid>
+      <enclosure url="http://localhost:5000/app/static/2.mp3" length="0" type="mp3"/>
+    </item>
+    <item>
+      <title>Test3</title>
+      <link>http://localhost:5000/app/static/3.mp3</link>
+      <itunes:author>111</itunes:author>
+      <author>123@mail.ru (111)</author>
+      <guid isPermaLink="false">http://localhost:5000/app/static/3.mp3</guid>
+      <enclosure url="http://localhost:5000/app/static/3.mp3" length="0" type="mp3"/>
+    </item>
+    <item>
+      <title>Ширан</title>
+      <link>http://localhost:5000/app/static/4.mp3</link>
+      <itunes:author>111</itunes:author>
+      <author>123@mail.ru (111)</author>
+      <guid isPermaLink="false">http://localhost:5000/app/static/4.mp3</guid>
+      <enclosure url="http://localhost:5000/app/static/4.mp3" length="0" type="mp3"/>
+    </item>
+    <item>
+      <title>всем привет гайз</title>
+      <link>http://localhost:5000/app/static/5.mp3</link>
+      <itunes:author>111</itunes:author>
+      <author>123@mail.ru (111)</author>
+      <guid isPermaLink="false">http://localhost:5000/app/static/5.mp3</guid>
+      <enclosure url="http://localhost:5000/app/static/5.mp3" length="0" type="mp3"/>
+    </item>
+    <item>
+      <title>стойте бармалеи</title>
+      <link>http://localhost:5000/app/static/6.mp3</link>
+      <itunes:author>111</itunes:author>
+      <author>123@mail.ru (111)</author>
+      <guid isPermaLink="false">http://localhost:5000/app/static/6.mp3</guid>
+      <enclosure url="http://localhost:5000/app/static/6.mp3" length="0" type="mp3"/>
     </item>
   </channel>
 </rss>
