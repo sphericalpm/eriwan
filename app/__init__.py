@@ -23,9 +23,9 @@ login_manager = LoginManager(app)
 #styles
 bootstrap = Bootstrap(app)
 
-
 from .rss import RssResponse
 app.response_class = RssResponse
+
 # podcast upload dropzone
 dropzone = Dropzone(app)
 csrf = CSRFProtect(app)

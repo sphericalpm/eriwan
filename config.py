@@ -14,6 +14,21 @@ class Config(object):
 
     STATIC_ROOT = 'app/static/'
     MEDIA_ROOT = 'media/'
+    MAX_CONTENT_LENGTH = 20 * 1024 * 1024
+    UPLOAD_PODCAST_FOLDER = 'episodes'
+
+    DROPZONE_DEFAULT_MESSAGE = 'Перетащите аудио файл в эту зону для загрузки'
+    DROPZONE_MAX_FILE_SIZE = 20
+    DROPZONE_INVALID_FILE_TYPE = 'Только аудио файлы в формате mp3'
+    DROPZONE_FILE_TOO_BIG = 'Вы можете загружать файлы не превышающие 20MB'
+    DROPZONE_ENABLE_CSRF = True
+    DROPZONE_MAX_FILES = 1,
+
+    DROPZONE_IN_FORM = True,
+    DROPZONE_UPLOAD_ON_CLICK = True,
+    DROPZONE_UPLOAD_ACTION = 'upload_podcast_handle'  # URL or endpoint
+    UNREGISTER_USER = 'Только зарегестрированные пользователи могу загружать подкасты'
+
 
     HOST = os.environ.get('HOST', 'localhost:5000')
     
