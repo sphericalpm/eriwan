@@ -3,12 +3,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 from app import app, db, login_manager
-from .utils import concatenate_audios
+from .audio_utils import concatenate_audios, text_to_speech
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    username = db.Column(db.String(64), index=True,
+                         unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
@@ -40,26 +41,23 @@ class Episode(db.Model):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
-        file_path = f'{static_path}/{self.id}.mp3'
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
+        file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
 
     # todo: add to celery task
-    def generate_wrapped_file(self, episode_path, name_path):
+    def generate_wrapped_file(self, episode_path):
         """
-        Concatenate episode name audio and episode audio
+        Concatenate an episode name mp3 file and an episode mp3 file
         :param episode_path: path to episode mp3
-        :param name_path: path to episode name mp3
-        :return:
         """
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
-
-        if not os.path.exists(static_path):
-            os.mkdir(static_path)
-
-        file_path = f'{static_path}/{self.id}.mp3'
-        concatenate_audios([name_path, episode_path], file_path)
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
+        if not os.path.exists(media_path):
+            os.makedirs(media_path)
+        temp_path = text_to_speech(self.name)
+        concatenate_audios([temp_path, episode_path],
+                           f'{media_path}/{self.id}.mp3')
 
 
 class Joke(db.Model):
@@ -68,35 +66,34 @@ class Joke(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'<Episode id: {self.id}>, name: {self.name}'
+        return f'<Joke id: {self.id}>, name: {self.joke_text}'
+
+    def jingle_file_path(self):
+        return os.path.join(
+            app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3"
+        )
 
     def get_file_path(self):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'jokes')
-        file_path = f'{static_path}/{self.id}.mp3'
+
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
+        file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
 
-    def generate_base_file(self):
-        '''
-        Return generate base audio file from joke_text
-        '''
-        pass
-
-    # todo: add to celery task
-    def generate_wrapped_file(self, joke_path):
+    def generate_wrapped_file(self):
         """
-        generate wrapped in jingles file from joke_path
-        :param joke_path: path to joke mp3
-        :return:
+        Generate wrapped in jingles mp3 file from joke_text
         """
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'jokes')
-        if not os.path.exists(static_path):
-            os.mkdir(static_path)
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
 
-        file_path = f'{static_path}/{self.id}.mp3'
-        jingle_path = os.path.join(app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3")
+        if not os.path.exists(media_path):
+            os.makedirs(media_path)
 
-        concatenate_audios([jingle_path, joke_path, jingle_path], file_path)
+        file_path = text_to_speech(self.joke_text)
+        concatenate_audios([self.jingle_file_path,
+                            file_path,
+                            self.jingle_file_path],
+                           f'{media_path}/{self.id}.mp3')
