@@ -108,13 +108,8 @@ yandex_tokens.py
 .envrc
 
 # audio files:
-*.mp3
+/app/media
 
-# ideas
-.vscode
-
-# audio files:
-app/media/
 # ideas
 .idea/
 .vscode
