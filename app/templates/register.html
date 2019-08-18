@@ -1,73 +1,15 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% block content %}
 <div class="container">
-    <div class = "col-md-6">
-    <form class="form-signin" action="" method="POST">
-      {{ form.hidden_tag() }}
-      <fieldset class="">
-         <legend class = "border-bottom h3 mb-3 font-weight-normal">Регистрация</legend>
-         <div class="form-group text-left">
-           {{ form.username.label(class="form-control-label") }}
-           {% if form.username.errors %}
-              {{ form.username(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                {% for error in form.username.errors %}
-                    <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-           {% else %}
-              {{ form.username(class="form-control") }}
-           {% endif %}
-         </div>
-         <div class="form-group text-left">
-           {{ form.email.label(class="form-control-label") }}
-           {% if form.email.errors %}
-              {{ form.email(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                {% for error in form.email.errors %}
-                    <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-           {% else %}
-              {{ form.email(class="form-control") }}
-           {% endif %}
-         </div>
-         <div class="form-group text-left">
-           {{ form.password.label(class="form-control-label") }}
-           {% if form.password.errors %}
-              {{ form.password(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                {% for error in form.password.errors %}
-                    <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-           {% else %}
-              {{ form.password(class="form-control") }}
-           {% endif %}
-         </div>
-         <div class="form-group text-left">
-           {{ form.confirm_password.label(class="form-control-label") }}
-           {% if form.confirm_password.errors %}
-              {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                {% for error in form.confirm_password.errors %}
-                    <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-           {% else %}
-              {{ form.confirm_password(class="form-control") }}
-           {% endif %}
-         </div>
-      </fieldset>
-      <div class="form-group">
-        {{ form.submit(class="btn btn-lg btn-primary") }}
-      </div>
-    </form>
-        <div class="border-top pt-3">
-            <small class = "text-muted">
-              Уже есть аккаунт? ><a class="ml-2" href="{{ url_for('login') }}">Войдите</a>
-            </small>
-        </div>
+    {{ super() }}
+    <h1>Регистрация</h1>
+    {{ wtf.quick_form(form) }}
+    <div class="border-top pt-3">
+        <small class = "text-muted">
+          Уже есть аккаунт? > <a class="ml-2" href="{{ url_for('login') }}">Войдите</a>
+        </small>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}
