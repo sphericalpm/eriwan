@@ -18,6 +18,7 @@ To use Eriwan you should follow next steps:
 export FLASK_APP=eriwan_podcast.py   
 flask run
 ```
+or just go to http://68.183.145.62/
 Required modules you can find in requirements.txt
 
 ## Contributing
