@@ -1,8 +1,11 @@
+import os
+
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+from werkzeug.datastructures import CombinedMultiDict
 
-from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm, EpisodeUploadForm
 from app.models import User, Joke, Episode
 from app import app, db
 from app.utils import admin_required
@@ -11,7 +14,8 @@ from app.utils import admin_required
 @app.route('/')
 def index():
     feed_blank = 'Podcast Main page: RSS feed'
-    return render_template('index.html', feed_blank=feed_blank)
+    form = EpisodeUploadForm()
+    return render_template('index.html', feed_blank=feed_blank, form=form)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -72,6 +76,32 @@ def add_joke_template():
         new_joke.generate_wrapped_file()
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
+
+
+@app.route('/upload-podcast', methods=['GET', 'POST'])
+def upload_podcast_handle():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = EpisodeUploadForm()
+    if request.method == 'POST':
+        if not current_user.is_authenticated:
+            return redirect(url_for('index'))
+        form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
+        if form.validate():
+            episode = Episode(
+                name=form.title.data,
+                user_id=current_user.get_id()
+            )
+            upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
+            static_path = app.config['MEDIA_ROOT']
+            path = f'{static_path}{upload_folder}'
+            if not os.path.exists(path):
+                os.mkdir(path)
+            db.session.add(episode)
+            db.session.flush()
+            db.session.commit()
+            form.file.data.save(f'{path}/{episode.id}.mp3')
+    return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
 @app.route('/user/<username>')
