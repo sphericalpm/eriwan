@@ -14,4 +14,5 @@ class Config(object):
 
     STATIC_ROOT = '/static/'
     
+    # Time period for parser
     PARSE_TIME_HOURS = 40
