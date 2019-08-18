@@ -1,12 +1,11 @@
-
 from flask import render_template, url_for, flash, redirect, request
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
 
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm
 from app.models import User, Joke
 from app import app, db
-
-from werkzeug.urls import url_parse
+from app.utils import admin_required
 
 
 @app.route('/')
@@ -27,9 +26,9 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash(('Ваш аккаунт успешно создан. Теперь Вы можете войти:'), category='info')
+        flash('Ваш аккаунт успешно создан. Теперь Вы можете войти:', category='info')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Sign Up', form=form)
+    return render_template('register.html', title='Регистрация', form=form)
 
   
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,14 +39,14 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid Username or password")
+            flash("Неверное имя пользователя или пароль")
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = '/'
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Войти', form=form)
 
 
 @app.route('/logout')
@@ -57,6 +56,7 @@ def logout():
 
 
 @app.route('/add_joke', methods=['GET', 'POST'])
+@admin_required
 def add_joke_template():
     form = UploadJokeForm()
     if form.validate_on_submit():
