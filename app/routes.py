@@ -1,3 +1,5 @@
+import os
+
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
@@ -84,7 +86,10 @@ def upload_podcast_handle():
         static_path = app.config['MEDIA_ROOT']
         db.session.add(episode)
         db.session.flush()
-        form.file.data.save(f'{static_path}{upload_folder}/{episode.id}.mp3')
+        path = f'{static_path}{upload_folder}'
+        if not os.path.exists(path):
+            os.mkdir(path)
+        form.file.data.save(f'{path}/{episode.id}.mp3')
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('index.html', form=form, feed_blank='Podcast Main page: RSS feed')
