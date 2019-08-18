@@ -1,53 +1,43 @@
 from pydub import AudioSegment
 from gtts import gTTS
 import os
+import tempfile
+
 from app import app
 
 
-def text_to_speech(id_or_name, text):
+def text_to_speech(text):
     """
-    check if dir for joke's and episode's files exists.
-    takes text, makes Russian speech, saved into mp3 file
+    takes text, makes Russian speech, saved into temporary mp3 file
     """
-    jokes_dir = os.path.join(app.config.get('STATIC_ROOT'), 'jokes')
-    episodes_dir = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
-    check_and_create_file_dir(jokes_dir, episodes_dir)
-
-    if isinstance(id_or_name, int):  # TODO change to method and path from model (Jokes/Episode)
-        file_name = os.path.join(
-            app.config.get('STATIC_ROOT'), "jokes", f'{id_or_name}.mp3'
-        )
-    elif isinstance(id_or_name, str):
-        file_name = os.path.join(
-            app.config.get('STATIC_ROOT'), "episodes", f'{id_or_name}.mp3'
-        )
-    else:
-        return
-
+    temporary_file = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
     tts = gTTS(text=text, lang='ru')
-    tts.save(file_name)
+    tts.save(temporary_file.name)
 
-    return file_name
+    return temporary_file.name
 
 
-def check_and_create_file_dir(jokes_dir, episodes_dir):
+def check_and_create_file_dir(directory):
     """
     if file's directory doesn't exist, create it,
     else: pass
     """
-    if not os.path.exists(jokes_dir):
-        os.makedirs(jokes_dir)
-    if not os.path.exists(episodes_dir):
-        os.makedirs(episodes_dir)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    return directory
 
 
-def concatenate_audios(path_list, out_path):
+def concatenate_audios(path_list, folder_name, id):
     """
     Concatenate audios into one file
     :param out_path: path to result mp3
     :param path_list: audio path list
     :return:
     """
+    directory = os.path.join(app.config.get('STATIC_ROOT'), folder_name)
+    out_path = os.path.join(check_and_create_file_dir(directory), "%s.mp3") % id
+
     res = AudioSegment.empty()
     for audio_path in path_list:
         res += AudioSegment.from_mp3(audio_path)
