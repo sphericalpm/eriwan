@@ -38,3 +38,4 @@ Werkzeug==0.15.5
 WTForms==2.2.1
 pydub
 flask-dropzone==1.5.4
+uwsgi==2.0.18
