@@ -65,23 +65,12 @@ class Joke(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-<<<<<<< HEAD
-<<<<<<< HEAD
         return f'<Joke id: {self.id}>, name: {self.name}'
-=======
-        return f'<Joke id: {self.id}>, name: {self.joke_text}'
->>>>>>> 4dcda3c2c7cc1d1794a803229ba8c627ab209633
 
     def jingle_file_path(self):
         return os.path.join(
             app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3"
         )
-<<<<<<< HEAD
-=======
-        return f'<Episode id: {self.id}>, name: {self.joke_text}'
->>>>>>> 3c2777723d49bf0ccd46f09aa681d5930485b9b9
-=======
->>>>>>> 4dcda3c2c7cc1d1794a803229ba8c627ab209633
 
     def get_file_path(self):
         '''
