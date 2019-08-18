@@ -34,8 +34,8 @@ class Episode(db.Model):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
-        file_path = f'{static_path}/{self.id}.mp3'
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
+        file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
 
@@ -46,8 +46,8 @@ class Episode(db.Model):
         :param episode_path: path to episode mp3
         """
 
-        name_path = text_to_speech(self.name, self.name)
-        concatenate_audios([name_path, episode_path], name_path)
+        temp_path = text_to_speech(self.name)
+        concatenate_audios([temp_path, episode_path], 'episodes')
 
 
 class Joke(db.Model):
@@ -62,8 +62,8 @@ class Joke(db.Model):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'jokes')
-        file_path = f'{static_path}/{self.id}.mp3'
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
+        file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
 
