@@ -108,7 +108,7 @@ yandex_tokens.py
 .envrc
 
 # audio files:
-/app/media
+app/media/
 
 # ideas
 .idea/
