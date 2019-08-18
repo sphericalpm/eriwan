@@ -26,5 +26,4 @@ def parse_anekdot():
             if not bool(Joke.query.filter_by(joke_text = joke.text).first()):
                 j = Joke(joke_text = joke.text, user_id = 999)
                 db.session.add(j)
-                print(joke.joke_text)
         db.session.commit()
