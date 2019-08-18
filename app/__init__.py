@@ -26,12 +26,17 @@ from app.parser import parse_anekdot
 from apscheduler.schedulers.background import BackgroundScheduler
 
 def scheduler_parser():
-
+    '''
+    Starts the parser.
+    '''
     parse_anekdot()
 
+# Scheduler settings and start.
+# Variables locate in config.Config
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=scheduler_parser, trigger="interval", hour=Config.PARSE_TIME_HOURS)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
+
