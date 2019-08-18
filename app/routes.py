@@ -1,9 +1,9 @@
-
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user
 
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm
 from app.models import User, Joke
+from app.rss import RssPodcast
 from app import app, db
 
 from werkzeug.urls import url_parse
@@ -31,7 +31,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Sign Up', form=form)
 
-  
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -65,3 +65,12 @@ def add_joke_template():
         db.session.commit()
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
+
+
+@app.route('/feed')
+def feed_view():
+    p = RssPodcast()
+    if p.are_not_equal():
+        p.sync_episodes()
+        p.rss_file(p.file.as_posix())
+    return render_template('feed_template.xml')

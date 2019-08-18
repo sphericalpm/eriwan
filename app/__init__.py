@@ -21,6 +21,9 @@ login_manager = LoginManager(app)
 #styles
 bootstrap = Bootstrap(app)
 
+from .rss import RssResponse
+app.response_class = RssResponse
+
 # The routes module is imported at the bottom and not at the top of the script
 # as it is always done. The bottom import is a workaround to circular imports,
 # a common problem with Flask applications.

@@ -55,6 +55,10 @@ class Episode(db.Model):
         file_path = f'{static_path}/{self.id}.mp3'
         concatenate_audios([name_path, episode_path], file_path)
 
+    def get_link(self):
+        file_path = self.get_file_path() or ''
+        return app.config.get('HOST') + file_path
+
 
 class Joke(db.Model):
     id = db.Column(db.Integer, primary_key=True)
