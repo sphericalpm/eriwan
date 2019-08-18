@@ -71,24 +71,27 @@ def add_joke_template():
     return render_template('add_joke.html', form=form)
 
 
-@app.route('/upload-podcast', methods=['POST'])
+@app.route('/upload-podcast', methods=['GET', 'POST'])
 def upload_podcast_handle():
     if not current_user.is_authenticated:
-        return app.config['UNREGISTER_USER'], 500
-    form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
-    if form.validate():
-        episode = Episode(
-            name=form.title.data,
-            user_id=current_user.get_id()
-        )
-        upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
-        static_path = app.config['MEDIA_ROOT']
-        db.session.add(episode)
-        db.session.flush()
-        form.file.data.save(f'{static_path}{upload_folder}/{episode.id}.mp3')
-        db.session.commit()
         return redirect(url_for('index'))
-    return render_template('index.html', form=form, feed_blank='Podcast Main page: RSS feed')
+    form = EpisodeUploadForm()
+    if request.method == 'POST':
+        if not current_user.is_authenticated:
+            return redirect(url_for('index'))
+        form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
+        if form.validate():
+            episode = Episode(
+                name=form.title.data,
+                user_id=current_user.get_id()
+            )
+            upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
+            static_path = app.config['MEDIA_ROOT']
+            db.session.add(episode)
+            db.session.flush()
+            form.file.data.save(f'{static_path}{upload_folder}/{episode.id}.mp3')
+            db.session.commit()
+    return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
 @app.route('/user/<username>')
