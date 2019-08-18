@@ -60,10 +60,40 @@ class UploadJokeForm(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
+class EditJokeForm(FlaskForm):
+    text = StringField("Текст", validators=[DataRequired()])
+    submit = SubmitField("Редактировать")
+
+
+class EditUserProfileForm(FlaskForm):
+    username = StringField(
+        'Имя пользователя',
+        render_kw={"placeholder": "Новое имя пользователя"},
+        validators=[
+            DataRequired(),
+            Length(min=2, max=64)])
+    old_password = PasswordField(
+        'Старый пароль',
+        validators=[
+            DataRequired(),
+            Length(min=3, max=25)])
+    password = PasswordField(
+        'Новый пароль',
+        validators=[
+            DataRequired(),
+            Length(min=3, max=25)])
+    confirm_password = PasswordField(
+        'Подтверждение пароля',
+        validators=[
+            DataRequired(),
+            Length(min=3, max=25),
+            EqualTo('password')])
+    submit = SubmitField('Редактировать')
+
+
 class EpisodeUploadForm(FlaskForm):
     file = FileField('Upload podcast', validators=[
         FileRequired(),
         FileAllowed(['mp3'], "Wrong format! Only mp3 format audio files")
     ])
     title = StringField('Имя подкаста', validators=[DataRequired()])
-
