@@ -22,11 +22,12 @@ Dropzone.options.uploadDropzone = {
             submitButton = document.querySelector("[type=submit]");
 
         submitButton.addEventListener('click', function (e) {
-            var isValid = document.querySelector('#podcast-name').reportValidity();
+            var isValid = document.querySelector('#podcast-name').value!=''
             e.preventDefault();
             e.stopPropagation();
             if (isValid)
                 myDropzone.processQueue();
+            else alert('Введите имя подскаста!')
         });
 
         this.on('sendingmultiple', function (data, xhr, formData) {
