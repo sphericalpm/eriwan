@@ -88,6 +88,7 @@ def upload_podcast_handle():
         form.file.data.save(f'{static_path}{upload_folder}/{episode.id}.mp3')
         db.session.commit()
         return redirect(url_for('index'))
+        flash("Успешно загружено")
     return render_template('index.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
