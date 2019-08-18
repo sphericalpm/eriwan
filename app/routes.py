@@ -73,7 +73,11 @@ def add_joke_template():
                         user_id=current_user.id)
         db.session.add(new_joke)
         db.session.commit()
+
+        # Generating audio file for joke
+        # TODO: add to background queue when ready
         new_joke.generate_wrapped_file()
+
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
 
@@ -83,10 +87,12 @@ def upload_podcast_handle():
     if not current_user.is_authenticated:
         return redirect(url_for('index'))
     form = EpisodeUploadForm()
+
     if request.method == 'POST':
         if not current_user.is_authenticated:
             return redirect(url_for('index'))
         form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
+
         if form.validate():
             episode = Episode(
                 name=form.title.data,
@@ -100,7 +106,10 @@ def upload_podcast_handle():
             db.session.add(episode)
             db.session.flush()
             db.session.commit()
-            form.file.data.save(f'{path}/{episode.id}.mp3')
+
+            episode_path = os.path.join(path, f'{episode.id}.mp3')
+            form.file.data.save(episode_path)
+            episode.generate_wrapped_file(episode_path)
     return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
@@ -121,6 +130,11 @@ def edit_joke(joke_id):
         joke.joke_text = form.text.data
         db.session.add(joke)
         db.session.commit()
+
+        # Generating audio file for joke
+        # TODO: add to background queue when ready
+        joke.generate_wrapped_file()
+
         flash('Ваши изменения сохранены!')
         return redirect(url_for('profile'))
     elif request.method == "GET":
