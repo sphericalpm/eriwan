@@ -1,6 +1,7 @@
+import xml.etree.ElementTree as ET
+
 from pathlib import Path
 from podgen import Podcast, Episode, Person, Media
-import xml.etree.ElementTree as ET
 
 from flask import Response
 from app import app
