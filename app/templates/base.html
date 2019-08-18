@@ -36,5 +36,7 @@
 {% endblock %}
 {% block footer %}
 {% endblock %}
-{% block extend_js %}
+{% block scripts %}
+    {{ dropzone.load_js() }}
+    <script src="{{url_for('.static', filename='js/episode_upload/drop_zone_conf.js')}}"></script>
 {% endblock %}

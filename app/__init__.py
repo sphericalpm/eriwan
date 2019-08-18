@@ -22,6 +22,8 @@ login_manager = LoginManager(app)
 
 #styles
 bootstrap = Bootstrap(app)
+
+# podcast upload dropzone
 dropzone = Dropzone(app)
 csrf = CSRFProtect(app)
 
