@@ -19,13 +19,16 @@ class RssResponse(Response):
 
 
 class RssPodcast(Podcast):
+    """
+    Custom class for comfortable work with the Podcast
+    """
 
     def __init__(self):
         super().__init__()
         self.name = "Eriwan_Podcast"
         self.explicit = True
         self.description = 'Eriwan_Podcast'
-        self.website = app.config.get('HOST')
+        self.website = app.config.get('HOST', 'localhost')
         self.file = file
 
         if not self.file.exists():
@@ -50,7 +53,8 @@ class RssPodcast(Podcast):
             email = user.email
             pdg_ep = Episode()
             pdg_ep.title = ep.name
-            pdg_ep.link = ep.get_link()
-            pdg_ep.media = Media(url=pdg_ep.link, size=454599964, type='mp3')
-            pdg_ep.authors = [Person(name=user, email=email)] if not user.is_admin else []
+            pdg_ep.link = str(ep.get_link())
+            pdg_ep.media = Media(url=pdg_ep.link,  type='mp3')
+            pdg_ep.authors = [
+                Person(name=user, email=email)] if not user.is_admin else []
             self.add_episode(pdg_ep)

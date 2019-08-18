@@ -15,4 +15,4 @@ class Config(object):
 
     STATIC_ROOT = '/static/'
 
-    HOST = os.environ.get('HOST', 'localhost')
+    HOST = os.environ.get('HOST', 'localhost:5000')

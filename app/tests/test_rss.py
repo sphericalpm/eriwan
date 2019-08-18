@@ -35,7 +35,7 @@ def test_rss_podcast_init():
     with mock.patch('pathlib.Path.exists', side_effect=lambda: True):
         p = RssPodcast()
         assert p.name == 'Eriwan_Podcast'
-        assert p.explicit == True
+        assert p.explicit
         assert p.description == 'Eriwan_Podcast'
         assert p.website == 'localhost'
         assert p.file.name == 'feed_template.xml'
@@ -47,7 +47,8 @@ def test_rss_podcast_init():
     ]
 )
 def test_are_not_equal_pos(all_eps, file_entries):
-    with mock.patch('app.models.Episode.query.count', side_effect=lambda: all_eps):
+    with mock.patch('app.models.Episode.query.count',
+                    side_effect=lambda: all_eps):
         with mock.patch('pathlib.Path.exists', side_effect=lambda: True):
             with mock.patch('app.rss.RssPodcast.get_number_file_entries',
                             side_effect=lambda: file_entries):
@@ -61,10 +62,10 @@ def test_are_not_equal_pos(all_eps, file_entries):
     ]
 )
 def test_are_not_equal_neg(all_eps, file_entries):
-    with mock.patch('app.models.Episode.query.count', side_effect=lambda: all_eps):
+    with mock.patch('app.models.Episode.query.count',
+                    side_effect=lambda: all_eps):
         with mock.patch('pathlib.Path.exists', side_effect=lambda: True):
             with mock.patch('app.rss.RssPodcast.get_number_file_entries',
                             side_effect=lambda: file_entries):
                 p = RssPodcast()
                 assert p.are_not_equal()
-

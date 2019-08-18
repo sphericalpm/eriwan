@@ -1,11 +1,14 @@
 import os
-from werkzeug.security import generate_password_hash, check_password_hash
+from pathlib import Path
 
-from app import app, db
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+
+from app import app, db, login_manager
 from .utils import concatenate_audios
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
@@ -20,6 +23,11 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class Episode(db.Model):
@@ -56,8 +64,10 @@ class Episode(db.Model):
         concatenate_audios([name_path, episode_path], file_path)
 
     def get_link(self):
-        file_path = self.get_file_path() or ''
-        return app.config.get('HOST') + file_path
+        static = app.config.get('STATIC_ROOT') + f'{self.id}.mp3'
+        file_path = Path(static)
+        host = app.config.get('HOST', 'localhost:5000')
+        return 'http://' + host + file_path.as_posix()
 
 
 class Joke(db.Model):
@@ -66,7 +76,7 @@ class Joke(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'<Episode id: {self.id}>, name: {self.name}'
+        return f'<Episode id: {self.id}>, name: {self.joke_text}'
 
     def get_file_path(self):
         '''
