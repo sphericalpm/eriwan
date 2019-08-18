@@ -1,6 +1,6 @@
 import os
 
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from werkzeug.datastructures import CombinedMultiDict
@@ -63,12 +63,22 @@ def logout():
 @app.route('/add_joke', methods=['GET', 'POST'])
 @admin_required
 def add_joke_template():
+    """
+    route, which can be accepted only by admin.
+    Here form, that create joke, write it in db, generate file with jingles and push flash_message.
+    :return: template 'add_joke.html'
+    """
     form = UploadJokeForm()
     if form.validate_on_submit():
         new_joke = Joke(joke_text=form.text.data,
                         user_id=current_user.id)
         db.session.add(new_joke)
         db.session.commit()
+
+        # Generating audio file for joke
+        # TODO: add to background queue when ready
+        new_joke.generate_wrapped_file()
+
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
 
@@ -95,7 +105,9 @@ def upload_podcast_handle():
             db.session.add(episode)
             db.session.flush()
             db.session.commit()
-            form.file.data.save(f'{path}/{episode.id}.mp3')
+            episode_path = os.path.join(path, f'{episode.id}.mp3')
+            form.file.data.save(episode_path)
+            episode.generate_wrapped_file(episode_path)
     return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
@@ -116,6 +128,11 @@ def edit_joke(joke_id):
         joke.joke_text = form.text.data
         db.session.add(joke)
         db.session.commit()
+
+        # Generating audio file for joke
+        # TODO: add to background queue when ready
+        joke.generate_wrapped_file()
+
         flash('Ваши изменения сохранены!')
         return redirect(url_for('profile'))
     elif request.method == "GET":
@@ -168,3 +185,7 @@ def feed_view():
         p.rss_file(p.file.as_posix())
     return render_template('feed_template.xml')
 
+
+@app.route('/media/episodes/<path:path>')
+def send_js(path):
+    return send_from_directory(os.path.join('..', app.config['MEDIA_ROOT'], 'episodes'), path)

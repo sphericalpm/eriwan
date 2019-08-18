@@ -109,6 +109,7 @@ yandex_tokens.py
 
 # audio files:
 app/media/
+media/
 
 # ideas
 .idea/
