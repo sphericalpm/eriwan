@@ -134,7 +134,7 @@ def edit_joke(joke_id):
         joke.generate_wrapped_file()
 
         flash('Ваши изменения сохранены!')
-        return redirect(url_for('profile'))
+        return redirect(url_for('profile', username=current_user.username))
     elif request.method == "GET":
         form.text.data = joke.joke_text
     return render_template('edit_joke.html', form=form)
