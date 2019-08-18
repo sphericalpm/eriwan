@@ -29,3 +29,5 @@ class Config(object):
     DROPZONE_UPLOAD_ACTION = 'upload_podcast_handle'  # URL or endpoint
     UNREGISTER_USER = 'Только зарегестрированные пользователи могу загружать подкасты'
 
+
+    HOST = os.environ.get('HOST', 'localhost:5000')
