@@ -71,9 +71,9 @@ class Joke(db.Model):
         """
         Generate wrapped in jingles mp3 file from joke_text
         """
-
-        file_path = text_to_speech(self.id, self.joke_text)
+        temp_path = text_to_speech(self.joke_text)
         jingle_path = os.path.join(
             app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3"
         )
-        concatenate_audios([jingle_path, file_path, jingle_path], file_path)
+
+        concatenate_audios([jingle_path, temp_path, jingle_path], 'jokes')
