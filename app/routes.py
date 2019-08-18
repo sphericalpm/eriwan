@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import secure_filename
 
-from app.forms import RegistrationForm, UploadJokeForm, LoginForm, FileUploadForm
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EpisodeUploadForm
 from app.models import User, Joke, Episode
 from app import app, db
 
@@ -13,7 +13,8 @@ from werkzeug.urls import url_parse
 @app.route('/')
 def index():
     feed_blank = 'Podcast Main page: RSS feed'
-    return render_template('index.html', feed_blank=feed_blank)
+    form = EpisodeUploadForm()
+    return render_template('index.html', feed_blank=feed_blank, form=form)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -71,7 +72,7 @@ def add_joke_template():
 @login_required
 @app.route('/upload-podcast', methods=['POST'])
 def upload_file():
-    form = FileUploadForm(CombinedMultiDict((request.files, request.form)))
+    form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
     if form.validate():
         filename = secure_filename(form.file.data.filename)
         episode = Episode(

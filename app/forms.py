@@ -1,17 +1,8 @@
-from flask_wtf import FlaskForm
-<<<<<<< HEAD
-from flask_wtf.file import FileField, FileAllowed, FileRequired
-
-
-class FileUploadForm(FlaskForm):
-    file = FileField('Upload podcast', validators=[
-        FileRequired(),
-        FileAllowed(['mp3'], "Wrong format! Only mp3 format audio files")
-    ])
-=======
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo,\
     ValidationError
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 from app.models import User
 
@@ -67,4 +58,10 @@ class LoginForm(FlaskForm):
 class UploadJokeForm(FlaskForm):
     text = StringField('Текст', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
->>>>>>> dev
+
+
+class EpisodeUploadForm(FlaskForm):
+    file = FileField('Upload podcast', validators=[
+        FileRequired(),
+        FileAllowed(['mp3'], "Wrong format! Only mp3 format audio files")
+    ])
