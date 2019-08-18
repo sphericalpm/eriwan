@@ -98,22 +98,20 @@ def upload_podcast_handle():
                 name=form.title.data,
                 user_id=current_user.get_id()
             )
-            # upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
-            # static_path = app.config['MEDIA_ROOT']
+            upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
+            static_path = app.config['MEDIA_ROOT']
+            
+            path = f'{static_path}{upload_folder}'
 
-            # path = f'{static_path}{upload_folder}'
-
-            # if not os.path.exists(path):
-            #     os.mkdir(path)
+            if not os.path.exists(path):
+                os.mkdir(path)
 
             db.session.add(episode)
             db.session.flush()
             db.session.commit()
+            form.file.data.save(f'{path}/{episode.id}.mp3')
 
-            file_path = episode.get_file_path()
-            episode.generate_wrapped_file(self, episode_path)
-
-            #form.file.data.save(f'{path}/{episode.id}.mp3')
+            
     return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
