@@ -31,8 +31,9 @@ def check_and_create_file_dir(directory):
 def concatenate_audios(path_list, folder_name, id):
     """
     Concatenate audios into one file
-    :param out_path: path to result mp3
-    :param path_list: audio path list
+    :param folder_name: folder_name for saving
+    :param path_list: audio path list\
+    :param id: id text from DB
     :return:
     """
     directory = os.path.join(app.config.get('STATIC_ROOT'), folder_name)
