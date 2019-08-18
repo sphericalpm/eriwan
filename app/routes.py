@@ -5,7 +5,6 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from werkzeug.datastructures import CombinedMultiDict
 
-
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm, EpisodeUploadForm
 from app.models import User, Joke, Episode
 from app import app, db
@@ -92,7 +91,6 @@ def upload_podcast_handle():
             path = f'{static_path}{upload_folder}'
             if not os.path.exists(path):
                 os.mkdir(path)
-
             db.session.add(episode)
             db.session.flush()
             db.session.commit()
@@ -154,4 +152,3 @@ def edit_profile(username):
     elif request.method == "GET":
         form.username.data = user.username
     return render_template('edit_joke.html', form=form)
-
