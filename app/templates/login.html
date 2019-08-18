@@ -2,21 +2,10 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                        <span>{{ message }}</span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <h1>Войти:</h1>
-        {{ wtf.quick_form(form) }}
-        <p>Новый пользователь? <a href="{{ url_for('register') }}">Зарегистрируйтесь!</a></p>
-    </div>
+<div class="container">
+    {{ super() }}
+    <h1>Войти:</h1>
+     {{ wtf.quick_form(form) }}
+    <p>Новый пользователь? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+</div>
 {% endblock %}
