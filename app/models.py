@@ -92,7 +92,7 @@ class Joke(db.Model):
             os.makedirs(media_path)
 
         file_path = text_to_speech(self.joke_text)
-        concatenate_audios([self.jingle_file_path,
+        concatenate_audios([self.jingle_file_path(),
                             file_path,
-                            self.jingle_file_path],
+                            self.jingle_file_path()],
                            f'{media_path}/{self.id}.mp3')
