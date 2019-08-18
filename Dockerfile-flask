@@ -14,18 +14,11 @@ EXPOSE 5000
 # Python dependencies
 COPY requirements.txt .
 # App dependencies
-RUN apt-get install ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg
 # Install Python dependencies
 RUN pip install -r requirements.txt
 # We copy the rest of the codebase into the image
 COPY . .
-
-# Firefox
-RUN wget https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/45.0.2/linux-x86_64/en-US/firefox-45.0.2.tar.bz2
-RUN tar -xjvf firefox*.tar.bz2
-RUN mv firefox /opt/firefox
-RUN ln -sf /opt/firefox/firefox /usr/bin/firefox
-
 # Finally, we run uWSGI with the ini file we
 # created earlier
 CMD [ "uwsgi", "--ini", "app.ini" ]
