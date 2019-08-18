@@ -42,15 +42,15 @@
 
 {% endblock %}
 {% block content %}
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li class="alert alert-danger" role="alert">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="alert alert-danger" role="alert">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 {% block footer %}
 {% endblock %}

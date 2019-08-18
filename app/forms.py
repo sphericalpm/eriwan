@@ -57,3 +57,8 @@ class LoginForm(FlaskForm):
 class UploadJokeForm(FlaskForm):
     text = StringField('Текст', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
+
+
+class EditJokeForm(FlaskForm):
+    text = StringField("Текст", validators=[DataRequired()])
+    submit = SubmitField("Редактировать")
