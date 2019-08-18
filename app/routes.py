@@ -30,7 +30,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Регистрация', form=form)
 
-  
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -65,3 +65,10 @@ def add_joke_template():
         db.session.commit()
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
