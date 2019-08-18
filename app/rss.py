@@ -51,6 +51,6 @@ class RssPodcast(Podcast):
             pdg_ep = Episode()
             pdg_ep.title = ep.name
             pdg_ep.link = ep.get_link()
-            pdg_ep.media = Media(url= pdg_ep.link, size=454599964, type='mp3')
+            pdg_ep.media = Media(url=pdg_ep.link, size=454599964, type='mp3')
             pdg_ep.authors = [Person(name=user, email=email)] if not user.is_admin else []
             self.add_episode(pdg_ep)
