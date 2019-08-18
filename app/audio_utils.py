@@ -32,13 +32,12 @@ def concatenate_audios(path_list, folder_name, id):
     """
     Concatenate audios into one file
     :param folder_name: folder_name for saving
-    :param path_list: audio path list\
+    :param path_list: audio path list
     :param id: id text from DB
     :return:
     """
     directory = os.path.join(app.config.get('MEDIA_ROOT'), folder_name)
     out_path = os.path.join(check_and_create_file_dir(directory), "%s.mp3") % id
-
     res = AudioSegment.empty()
     for audio_path in path_list:
         res += AudioSegment.from_mp3(audio_path)
