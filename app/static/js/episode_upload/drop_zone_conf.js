@@ -7,6 +7,8 @@ var filename = "";
         acceptedFiles: "audio/mpeg, .mp3",
         dictDefaultMessage: "Перетащите аудио файл в эту зону для загрузки",
         maxFiles: 1,
+        addRemoveLinks: true,
+        dictRemoveFile: 'удалить',
         accept: function(file, done) {
             console.log(file.name);
             filename = file.name;
@@ -27,5 +29,6 @@ var filename = "";
             this.on('sendingmultiple', function(data, xhr, formData) {
                 formData.append("warehouse", jQuery("#podcast-name").val());
             });
+
         }
     };
