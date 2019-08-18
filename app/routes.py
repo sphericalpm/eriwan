@@ -1,7 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
 from werkzeug.datastructures import CombinedMultiDict
-from werkzeug.utils import secure_filename
 
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EpisodeUploadForm
 from app.models import User, Joke, Episode
@@ -70,22 +69,20 @@ def add_joke_template():
 
 
 @app.route('/upload-podcast', methods=['POST'])
-def upload_podcast():
+def upload_podcast_handle():
     if not current_user.is_authenticated:
-        return 'Только зарегистрированные пользователи могу загружать подкасты', 500
+        return app.config['UNREGISTER_USER'], 500
     form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
     if form.validate():
-        print('reg', request.files, request.form)
-        filename = secure_filename(form.file.data.filename)
         episode = Episode(
-            name=filename.rstrip('.mp3'),
-            #user_id=current_user.get_id()
+            name=form.title.data,
+            user_id=current_user.get_id()
         )
         upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
         static_path = app.config['MEDIA_ROOT']
-        form.file.data.save(f'{static_path}{upload_folder}/1.mp3')
         db.session.add(episode)
+        db.session.flush()
+        form.file.data.save(f'{static_path}{upload_folder}/{episode.id}.mp3')
         db.session.commit()
-        flash("File upload")
         return redirect(url_for('index'))
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, feed_blank='Podcast Main page: RSS feed')

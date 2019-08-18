@@ -65,3 +65,5 @@ class EpisodeUploadForm(FlaskForm):
         FileRequired(),
         FileAllowed(['mp3'], "Wrong format! Only mp3 format audio files")
     ])
+    title = StringField('Имя подкаста', validators=[DataRequired()])
+

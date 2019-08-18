@@ -10,10 +10,22 @@
     {{super()}}
 <div class="container">
     <div class="text-center">
-        <h1>{{ feed_blank }}</h1>
-        {{ dropzone.create(action=url_for('upload_podcast')) }}
-        {{ dropzone.load_js() }}
-        {{ dropzone.config() }}
+        <form action="{{ url_for('upload_podcast_handle') }}" method="POST" class="dropzone" id="uploadDropzone">
+        {{ form.csrf_token }}
+            <div class="title-wrapper text-center">
+                <label>Имя подкаста</label>
+                <input type="text" name="title" id="podcast-name" />
+            </div>
+
+        </form>
+        <div id="upload-btn">
+            <button id="submit-upload btn" type="submit">Загрузить</button>
+        </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    {{ dropzone.load_js() }}
+    <script src="{{url_for('.static', filename='js/episode_upload/drop_zone_conf.js')}}"></script>
 {% endblock %}
