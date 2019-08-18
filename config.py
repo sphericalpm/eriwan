@@ -13,3 +13,5 @@ class Config(object):
     ADMINS = ['your-email@example.com']
 
     STATIC_ROOT = '/static/'
+    
+    PARSE_TIME_HOURS = 40
