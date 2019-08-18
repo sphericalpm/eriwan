@@ -45,9 +45,11 @@ class Episode(db.Model):
         Concatenate an episode name mp3 file and an episode mp3 file
         :param episode_path: path to episode mp3
         """
-
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
+        if not os.path.exists(media_path):
+            os.makedirs(media_path)
         temp_path = text_to_speech(self.name)
-        concatenate_audios([temp_path, episode_path], 'episodes')
+        concatenate_audios([temp_path, episode_path], f'{media_path}/{self.id}.mp3')
 
 
 class Joke(db.Model):
@@ -67,6 +69,7 @@ class Joke(db.Model):
         '''
         Return wrapped in jingles file path
         '''
+
         media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
         file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
@@ -76,8 +79,12 @@ class Joke(db.Model):
         """
         Generate wrapped in jingles mp3 file from joke_text
         """
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
 
-        file_path = text_to_speech(self.id, self.joke_text)
+        if not os.path.exists(media_path):
+            os.makedirs(media_path)
+
+        file_path = text_to_speech(self.joke_text)
         concatenate_audios([self.jingle_file_path,
                             file_path,
-                            self.jingle_file_path], file_path)
+                            self.jingle_file_path], f'{media_path}/{self.id}.mp3')
