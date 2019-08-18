@@ -55,7 +55,13 @@ class LoginForm(FlaskForm):
 
 
 class UploadJokeForm(FlaskForm):
-    text = StringField('Текст', validators=[DataRequired()])
+    """
+    Form for Jokes:
+    :parameter:
+    text - Joke text;
+    submit - submit button;
+    """
+    text = StringField('Текст шутки', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
 
 

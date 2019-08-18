@@ -58,12 +58,18 @@ def logout():
 @app.route('/add_joke', methods=['GET', 'POST'])
 @admin_required
 def add_joke_template():
+    """
+    route, which can be accepted only by admin.
+    Here form, that create joke, write it in db, generate file with jingles and push flash_message.
+    :return: template 'add_joke.html'
+    """
     form = UploadJokeForm()
     if form.validate_on_submit():
         new_joke = Joke(joke_text=form.text.data,
                         user_id=current_user.id)
         db.session.add(new_joke)
         db.session.commit()
+        new_joke.generate_wrapped_file()
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
 
