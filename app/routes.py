@@ -1,6 +1,6 @@
 import os
 
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from werkzeug.datastructures import CombinedMultiDict
@@ -188,3 +188,7 @@ def feed_view():
         p.rss_file(p.file.as_posix())
     return render_template('feed_template.xml')
 
+
+@app.route('/media/episodes/<path:path>')
+def send_js(path):
+    return send_from_directory(os.path.join('..', app.config['MEDIA_ROOT'], 'episodes'), path)
