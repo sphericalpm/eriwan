@@ -6,6 +6,7 @@ Flask-Bootstrap==3.3.7.1
 Flask-Bootstrap4==4.0.2
 Flask-Login==0.4.1
 Flask-Migrate==2.5.2
+Flask-Sessionstore==0.4.5
 Flask-SQLAlchemy==2.4.0
 Flask-WTF==0.14.2
 itsdangerous==1.1.0
