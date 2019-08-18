@@ -2,14 +2,8 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-<<<<<<< HEAD
 from app import app, db
 from .audio_utils import concatenate_audios, text_to_speech
-=======
-from app import app, db, login_manager
-from .utils import concatenate_audios
->>>>>>> 3c2777723d49bf0ccd46f09aa681d5930485b9b9
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,15 +66,22 @@ class Joke(db.Model):
 
     def __repr__(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         return f'<Joke id: {self.id}>, name: {self.name}'
+=======
+        return f'<Joke id: {self.id}>, name: {self.joke_text}'
+>>>>>>> 4dcda3c2c7cc1d1794a803229ba8c627ab209633
 
     def jingle_file_path(self):
         return os.path.join(
             app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3"
         )
+<<<<<<< HEAD
 =======
         return f'<Episode id: {self.id}>, name: {self.joke_text}'
 >>>>>>> 3c2777723d49bf0ccd46f09aa681d5930485b9b9
+=======
+>>>>>>> 4dcda3c2c7cc1d1794a803229ba8c627ab209633
 
     def get_file_path(self):
         '''
