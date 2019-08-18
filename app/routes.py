@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm
 from app.models import User, Joke, Episode
 from app import app, db
 from app.utils import admin_required
@@ -99,3 +99,26 @@ def delete_joke(joke_id):
     db.session.commit()
     flash("Успешно удалено")
     return redirect(url_for('profile', username=current_user.username))
+
+
+@app.route('/user/edit_profile/<username>', methods=['GET', 'POST'])
+def edit_profile(username):
+    form = EditUserProfileForm()
+    user = User.query.filter_by(username=username).first_or_404()
+    if form.validate_on_submit():
+        if current_user.id == user.id:
+            if user.check_password(form.old_password.data):
+                user.username = form.username.data
+                user.set_password(form.password.data)
+                db.session.add(user)
+                db.session.commit()
+                flash('Ваши изменения сохранены!')
+                return redirect(url_for('profile', username=user.username))
+            else:
+                flash("Старый пароль неверный")
+                return redirect(url_for("/user/edit_profile/", username=user.username))
+        else:
+            flash('Доступ запрещён')
+    elif request.method == "GET":
+        form.username.data = user.username
+    return render_template('edit_joke.html', form=form)
