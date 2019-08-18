@@ -68,6 +68,7 @@ def add_joke_template():
 
 
 @app.route('/user/<username>')
+@login_required
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     episodes = Episode.query.filter_by(user_id=user.id)
