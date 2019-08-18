@@ -6,9 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile-flask
     volumes:
-      - ./app/static/jingles:/app/app/static/jingles
-      - ./media:/app/media
-      - ./app.db:/app/app.db
+      - /www/Eriwan/app/static/jingles:/app/app/static/jingles
+      - /www/Eriwan/media:/app/media
+      - /www/Eriwan/app.db:/app/app.db
   nginx:
     image: webapp-nginx
     build:
