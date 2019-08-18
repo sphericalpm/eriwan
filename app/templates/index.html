@@ -1,5 +1,9 @@
 <!-- HERE WILL BE MAIN PAGE-->
 {% extends "base.html" %}
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{url_for('.static', filename='css/drop_zone_style.css')}}">
+{% endblock %}
 
 {% block content %}
     {{super()}}
@@ -8,4 +12,23 @@
         <h1>{{ feed_blank }}</h1>
         {% include 'upload_form.html' %}
     </div>
+</div>
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/episode_upload/dropzone.js') }}"></script>
+    <script>
+        Dropzone.options.EpisodeDropZone = {
+          paramName: "file", // The name that will be used to transfer the file
+          maxFilesize: 20, // MB
+          dictDefaultMessage: "Перетащите аудио файл в эту зону для загрузки",
+          accept: function(file, done) {
+            if (file.name == "justinbieber.jpg") {
+              done("Naha, you don't.");
+            }
+            else { done(); }
+          }
+        };
+    </script>
+{% endblock %}
+

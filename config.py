@@ -13,6 +13,6 @@ class Config(object):
     ADMINS = ['your-email@example.com']
 
     STATIC_ROOT = '/static/'
-
+    MEDIA_ROOT = '/media/'
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
     UPLOAD_PODCAST_FOLDER = 'episodes'
