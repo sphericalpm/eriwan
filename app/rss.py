@@ -1,6 +1,7 @@
+import xml.etree.ElementTree as ET
+
 from pathlib import Path
 from podgen import Podcast, Episode, Person, Media
-import xml.etree.ElementTree as ET
 
 from flask import Response
 from app import app
@@ -54,7 +55,8 @@ class RssPodcast(Podcast):
             pdg_ep = Episode()
             pdg_ep.title = ep.name
             pdg_ep.link = str(ep.get_link())
-            pdg_ep.media = Media(url=pdg_ep.link,  type='mp3')
+            pdg_ep.media = Media(url=pdg_ep.link, type='mp3')
             pdg_ep.authors = [
-                Person(name=user, email=email)] if not user.is_admin else []
+                Person(name=user.username,
+                       email=email)] if not user.is_admin else []
             self.add_episode(pdg_ep)

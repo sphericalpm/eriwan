@@ -69,3 +69,4 @@ def test_are_not_equal_neg(all_eps, file_entries):
                             side_effect=lambda: file_entries):
                 p = RssPodcast()
                 assert p.are_not_equal()
+
