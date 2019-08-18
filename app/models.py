@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -58,6 +60,11 @@ class Episode(db.Model):
         temp_path = text_to_speech(self.name)
         concatenate_audios([temp_path, episode_path],
                            f'{media_path}/{self.id}.mp3')
+
+    def get_link(self):
+        static = app.config.get('STATIC_ROOT') + f'{self.id}.mp3'
+        host = app.config.get('HOST', 'localhost:5000')
+        return f'http://{host}/{Path(static).as_posix()}'
 
 
 class Joke(db.Model):
