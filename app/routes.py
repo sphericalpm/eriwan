@@ -1,54 +1,18 @@
-<<<<<<< HEAD
-# View functions
-from flask import render_template, url_for, redirect
-from werkzeug.datastructures import CombinedMultiDict
-from flask import request
-from werkzeug.utils import secure_filename
-from flask_login import current_user, login_required
-
-from app import app
-from .forms import FileUploadForm
-from .models import Episode
-from app import db
-=======
-
 from flask import render_template, url_for, flash, redirect, request
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.datastructures import CombinedMultiDict
+from werkzeug.utils import secure_filename
 
-from app.forms import RegistrationForm, UploadJokeForm, LoginForm
-from app.models import User, Joke
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm, FileUploadForm
+from app.models import User, Joke, Episode
 from app import app, db
 
 from werkzeug.urls import url_parse
->>>>>>> dev
 
 
 @app.route('/')
 def index():
     feed_blank = 'Podcast Main page: RSS feed'
-<<<<<<< HEAD
-    form = FileUploadForm()
-    return render_template('index.html', feed_blank=feed_blank, form=form)
-
-
-@login_required
-@app.route('/upload-podcast', methods=['POST'])
-def upload_file():
-    form = FileUploadForm(CombinedMultiDict((request.files, request.form)))
-    if form.validate():
-        filename = secure_filename(form.file.data.filename)
-        episode = Episode(
-            name=filename.rstrip('.mp3'),
-            user_id=current_user.get_id()
-        )
-        upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
-        static_path = app.config['STATIC_ROOT']
-        form.file.data.save(f'{static_path}{upload_folder}/{episode.id}')
-        db.session.add(episode)
-        db.session.commit()
-        return redirect(url_for('index'))
-    return render_template('index.html', form=form)
-=======
     return render_template('index.html', feed_blank=feed_blank)
 
 
@@ -102,4 +66,22 @@ def add_joke_template():
         db.session.commit()
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
->>>>>>> dev
+
+
+@login_required
+@app.route('/upload-podcast', methods=['POST'])
+def upload_file():
+    form = FileUploadForm(CombinedMultiDict((request.files, request.form)))
+    if form.validate():
+        filename = secure_filename(form.file.data.filename)
+        episode = Episode(
+            name=filename.rstrip('.mp3'),
+            user_id=current_user.get_id()
+        )
+        upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
+        static_path = app.config['STATIC_ROOT']
+        form.file.data.save(f'{static_path}{upload_folder}/{episode.id}')
+        db.session.add(episode)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('index.html', form=form)
