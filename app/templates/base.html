@@ -2,35 +2,55 @@
 {% block title %}
 {% if title %}{{ title }} - Eriwan{% else %}Eriwan Radio{% endif %}
 {% endblock %}
+
 {% block navbar %}
-<nav class="navbar navbar-default">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('index') }}">Главная</a></li>
-                <li><a href="{{ url_for('add_joke_template') }}">Добавить шутку</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                {% if current_user.is_anonymous %}
-                <li><a href="{{ url_for('login') }}">Войти</a></li>
-                {% else %}
-                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Eriwan Podcast</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" a href="{{ url_for('index') }}">Главная<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                {% if current_user.is_admin %}
+                <a class="nav-link" a href="{{ url_for('add_joke_template') }}">Добавить шутку</a>
                 {% endif %}
-            </ul>
+            </li>
+            <li class="nav-item">
+                    {% if current_user.is_authenticated %} 
+                    <li>
+                        <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"> Профиль</a>
+                    </li> 
+                    {% endif %}
+            </li>
+            <li class="nav-item my-2 my-sm-0" >
+                {% if current_user.is_anonymous %}
+                    <a class="nav-link" a href="{{ url_for('login') }}">Войти</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
+                {% endif %}
+            </li>
+
+          </ul>
         </div>
-    </div>
 </nav>
+
 {% endblock %}
 {% block content %}
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li class="alert alert-danger" role="alert">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="alert alert-danger" role="alert">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 {% block footer %}
 {% endblock %}

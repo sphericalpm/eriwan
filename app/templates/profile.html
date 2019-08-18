@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="text-center">
+            <p>Профиль пользователя: <b>{{ user.username }}{% if user.is_admin %}
+                ✓ Администратор
+            {% endif %}</b></p>
+            <a href="edit_profile/{{ current_user.username }}" class="btn btn-primary">Редактировать</a>
+        </div>
+        <div class="center-block">
+            {% if user.is_admin %}
+                <p><b>Шутки</b></p>
+                {% for joke in joks %}
+                    {% include 'includes/joke.html' %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
