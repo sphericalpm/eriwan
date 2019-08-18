@@ -7,7 +7,8 @@ from .audio_utils import concatenate_audios, text_to_speech
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    username = db.Column(db.String(64), index=True,
+                         unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
@@ -49,7 +50,8 @@ class Episode(db.Model):
         if not os.path.exists(media_path):
             os.makedirs(media_path)
         temp_path = text_to_speech(self.name)
-        concatenate_audios([temp_path, episode_path], f'{media_path}/{self.id}.mp3')
+        concatenate_audios([temp_path, episode_path],
+                           f'{media_path}/{self.id}.mp3')
 
 
 class Joke(db.Model):
@@ -87,4 +89,5 @@ class Joke(db.Model):
         file_path = text_to_speech(self.joke_text)
         concatenate_audios([self.jingle_file_path,
                             file_path,
-                            self.jingle_file_path], f'{media_path}/{self.id}.mp3')
+                            self.jingle_file_path],
+                           f'{media_path}/{self.id}.mp3')
