@@ -2,6 +2,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h4>{{ feed_blank }}</h4>
-    {% include 'upload_form.html' %}
+    {{super()}}
+<div class="container">
+    <div class="text-center">
+        <h1>{{ feed_blank }}</h1>
+        {% include 'upload_form.html' %}
+    </div>
 {% endblock %}

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>An unexpected error has occurred'</h1>
-    <p><a href="{{ url_for('index') }}">'Back'}}</a></p>
+    {{super()}}
+<div class="container">
+    <div class="text-center">
+        <h1>Internal Server Error</h1>
+        <h3><a href="{{ url_for('index') }}">Назад</a></h3>
+    </div>
 {% endblock %}
