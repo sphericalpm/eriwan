@@ -119,5 +119,15 @@ yandex_tokens.py
 *.mp3
 =======
 # ideas
+.idea/
 .vscode
+<<<<<<< HEAD
 >>>>>>> 3d802e7dbd71cd87ba41980551ff0c5687dbc32a
+=======
+.idea/
+
+app.db
+>>>>>>> b45341c73137bff62bef8e4dd13eca0c4cb2f65e
+.idea/
+*.mp3
+app.db
