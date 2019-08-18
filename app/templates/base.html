@@ -42,15 +42,18 @@
 
 {% endblock %}
 {% block content %}
-    {% with messages = get_flashed_messages() %}
+   {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li class="alert alert-danger" role="alert">{{ message }}</li>
-                {% endfor %}
-            </ul>
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <span>{{ message }}</span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
         {% endif %}
-    {% endwith %}
+        {% endwith %}
 {% endblock %}
 {% block footer %}
 {% endblock %}
