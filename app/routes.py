@@ -64,6 +64,11 @@ def add_joke_template():
                         user_id=current_user.id)
         db.session.add(new_joke)
         db.session.commit()
+
+        # Generating audio file for joke
+        # TODO: add to background queue when ready
+        new_joke.generate_wrapped_file()
+
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
 
@@ -85,6 +90,11 @@ def edit_joke(joke_id):
         joke.joke_text = form.text.data
         db.session.add(joke)
         db.session.commit()
+
+        # Generating audio file for joke
+        # TODO: add to background queue when ready
+        joke.generate_wrapped_file()
+
         flash('Ваши изменения сохранены!')
         return redirect(url_for('profile'))
     elif request.method == "GET":
