@@ -34,8 +34,8 @@ class Episode(db.Model):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'episodes')
-        file_path = f'{static_path}/{self.id}.mp3'
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
+        file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
 
@@ -45,9 +45,11 @@ class Episode(db.Model):
         Concatenate an episode name mp3 file and an episode mp3 file
         :param episode_path: path to episode mp3
         """
-
-        name_path = text_to_speech(self.name, self.name)
-        concatenate_audios([name_path, episode_path], name_path)
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
+        if not os.path.exists(media_path):
+            os.makedirs(media_path)
+        temp_path = text_to_speech(self.name)
+        concatenate_audios([temp_path, episode_path], f'{media_path}/{self.id}.mp3')
 
 
 class Joke(db.Model):
@@ -56,24 +58,33 @@ class Joke(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'<Episode id: {self.id}>, name: {self.name}'
+        return f'<Joke id: {self.id}>, name: {self.name}'
+
+    def jingle_file_path(self):
+        return os.path.join(
+            app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3"
+        )
 
     def get_file_path(self):
         '''
         Return wrapped in jingles file path
         '''
-        static_path = os.path.join(app.config.get('STATIC_ROOT'), 'jokes')
-        file_path = f'{static_path}/{self.id}.mp3'
+
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
+        file_path = f'{media_path}/{self.id}.mp3'
         if os.path.exists(file_path):
             return file_path
 
-    def generate_base_file(self):
+    def generate_wrapped_file(self):
         """
         Generate wrapped in jingles mp3 file from joke_text
         """
+        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
 
-        file_path = text_to_speech(self.id, self.joke_text)
-        jingle_path = os.path.join(
-            app.config.get('STATIC_ROOT'), "jingles", "jingle.mp3"
-        )
-        concatenate_audios([jingle_path, file_path, jingle_path], file_path)
+        if not os.path.exists(media_path):
+            os.makedirs(media_path)
+
+        file_path = text_to_speech(self.joke_text)
+        concatenate_audios([self.jingle_file_path,
+                            file_path,
+                            self.jingle_file_path], f'{media_path}/{self.id}.mp3')

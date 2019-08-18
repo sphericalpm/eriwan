@@ -1,9 +1,6 @@
 from pydub import AudioSegment
 from gtts import gTTS
-import os
 import tempfile
-
-from app import app
 
 
 def text_to_speech(text):
@@ -17,27 +14,13 @@ def text_to_speech(text):
     return temporary_file.name
 
 
-def check_and_create_file_dir(directory):
-    """
-    if file's directory doesn't exist, create it,
-    else: pass
-    """
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-    return directory
-
-
-def concatenate_audios(path_list, folder_name, id):
+def concatenate_audios(path_list, out_path):
     """
     Concatenate audios into one file
-    :param folder_name: folder_name for saving
+    :param out_path: path for saving mp3 file
     :param path_list: audio path list
-    :param id: id text from DB
     :return:
     """
-    directory = os.path.join(app.config.get('MEDIA_ROOT'), folder_name)
-    out_path = os.path.join(check_and_create_file_dir(directory), f'{id}.mp3')
 
     res = AudioSegment.empty()
     for audio_path in path_list:
