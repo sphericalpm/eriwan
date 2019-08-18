@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-flask
-    volumes:
-      - "./:/app"
+    # volumes:
+    #   - "./:/app"
   nginx:
     image: webapp-nginx
     build:
