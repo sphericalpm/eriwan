@@ -165,6 +165,8 @@ def feed_view():
     p = RssPodcast()
     if p.are_not_equal():
         p.sync_episodes()
+        print('sdf')
         p.rss_file(p.file.as_posix())
+        print('xcvxvc')
     return render_template('feed_template.xml')
 
