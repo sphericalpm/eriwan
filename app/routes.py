@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm
-from app.models import User, Joke
+from app.models import User, Joke, Episode
 from app import app, db
 from app.utils import admin_required
 
@@ -65,3 +65,11 @@ def add_joke_template():
         db.session.commit()
         flash('Шутка добавлена!')
     return render_template('add_joke.html', form=form)
+
+
+@app.route('/user/<username>')
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    episodes = Episode.query.filter_by(user_id=user.id)
+    joks = Joke.query
+    return render_template('profile.html', user=user, joks=joks, episodes=episodes)
