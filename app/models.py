@@ -2,7 +2,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-from app import app, db
+from app import app, db, login_manager
 from .audio_utils import concatenate_audios, text_to_speech
 
 class User(UserMixin, db.Model):
