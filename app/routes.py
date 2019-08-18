@@ -71,7 +71,6 @@ def add_joke_template():
     return render_template('add_joke.html', form=form)
 
 
-<<<<<<< HEAD
 @app.route('/upload-podcast', methods=['POST'])
 def upload_podcast_handle():
     if not current_user.is_authenticated:
@@ -90,7 +89,8 @@ def upload_podcast_handle():
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('index.html', form=form, feed_blank='Podcast Main page: RSS feed')
-=======
+
+
 @app.route('/user/<username>')
 @login_required
 def profile(username):
