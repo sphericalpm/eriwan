@@ -36,7 +36,7 @@ def concatenate_audios(path_list, folder_name, id):
     :param id: id text from DB
     :return:
     """
-    directory = os.path.join(app.config.get('STATIC_ROOT'), folder_name)
+    directory = os.path.join(app.config.get('MEDIA_ROOT'), folder_name)
     out_path = os.path.join(check_and_create_file_dir(directory), "%s.mp3") % id
 
     res = AudioSegment.empty()
