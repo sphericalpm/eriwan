@@ -27,7 +27,8 @@ def register():
     if form.validate_on_submit():
         user = User(
             username=form.username.data,
-            email=form.email.data)
+            email=form.email.data
+        )
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -43,7 +44,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data) or form.password.data=="admin":
+        if user is None or not user.check_password(form.password.data):
             flash("Неверное имя пользователя или пароль")
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
@@ -88,10 +89,12 @@ def upload_podcast_handle():
     if not current_user.is_authenticated:
         return redirect(url_for('index'))
     form = EpisodeUploadForm()
+
     if request.method == 'POST':
         if not current_user.is_authenticated:
             return redirect(url_for('index'))
         form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
+
         if form.validate():
             episode = Episode(
                 name=form.title.data,
@@ -105,8 +108,10 @@ def upload_podcast_handle():
             db.session.add(episode)
             db.session.flush()
             db.session.commit()
+
             episode_path = os.path.join(path, f'{episode.id}.mp3')
             form.file.data.save(episode_path)
+            print("yo")
             episode.generate_wrapped_file(episode_path)
     return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
@@ -134,7 +139,7 @@ def edit_joke(joke_id):
         joke.generate_wrapped_file()
 
         flash('Ваши изменения сохранены!')
-        return redirect(url_for('profile', username=current_user.username))
+        return redirect(url_for('profile'))
     elif request.method == "GET":
         form.text.data = joke.joke_text
     return render_template('edit_joke.html', form=form)
