@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %}
+Eriwan - add joke page!
+{% endblock%}
+{% block content %}
+{{super()}}
+<div class="container">
+    <div class="text-center">
+        <h1>Добавление анекдотов</h1>
+    </div>
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock%}
