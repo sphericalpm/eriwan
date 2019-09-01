@@ -21,12 +21,12 @@
                 </li>
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}">
+                        <a class="nav-link" href="{{ url_for('profile') }}">
                             Профиль</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="{{ url_for('upload_podcast_handle', username=current_user.username) }}">Загрузить
+                           href="{{ url_for('upload_podcast_get') }}">Загрузить
                             подкаст</a>
                     </li>
                 {% endif %}
@@ -53,7 +53,7 @@
         {% for message in messages %}
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
             <span>{{ message }}</span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="close" onclick="this.parentElement.remove()" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>

@@ -3,21 +3,24 @@ import os
 from flask import render_template, url_for, flash, redirect, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from werkzeug.datastructures import CombinedMultiDict
 
-from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm, EpisodeUploadForm
+from app.audio_utils import prepend_intro_text_and_save
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EpisodeUploadForm, \
+    EditUserNameForm, EditUserPasswordForm
 from app.models import User, Joke, Episode
-from app.rss import RssPodcast
+from app.rss import get_rss_feed
 from app import app, db
 from app.utils import admin_required
 
 
 @app.route('/')
 def index():
-    feed_blank = 'Podcast Main page: RSS feed'
-    form = EpisodeUploadForm()
-    return render_template('index.html', feed_blank=feed_blank, form=form)
+    if current_user.is_authenticated:
+        return redirect(url_for('upload_podcast_get'))
+    return redirect(url_for('login'))
 
+
+# auth section
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -60,6 +63,36 @@ def logout():
     return redirect(url_for('index'))
 
 
+# podcast section
+
+@app.route('/upload_podcast', methods=['GET'])
+def upload_podcast_get():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'))
+    episode_upload_form = EpisodeUploadForm()
+    return render_template('upload_podcast.html', form=episode_upload_form, feed_blank='Podcast Main page: RSS feed')
+
+
+@app.route('/upload_podcast', methods=['POST'])
+@login_required
+def upload_podcast_post():
+    form = EpisodeUploadForm()
+    if form.validate():
+        episode = Episode(name=form.title.data,
+                          user_id=current_user.get_id())
+        db.session.add(episode)
+        db.session.flush()
+        db.session.commit()
+        prepend_intro_text_and_save(form.file.data, form.title.data, episode.get_file_path())
+        flash('Подкаст загружен')
+        redirect(url_for('index'))
+    else:
+        flash('Неверные данные')
+    return redirect(url_for('upload_podcast_get'))
+
+
+# joke section
+
 @app.route('/add_joke', methods=['GET', 'POST'])
 @admin_required
 def add_joke_template():
@@ -83,44 +116,8 @@ def add_joke_template():
     return render_template('add_joke.html', form=form)
 
 
-@app.route('/upload-podcast', methods=['GET', 'POST'])
-def upload_podcast_handle():
-    if not current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = EpisodeUploadForm()
-    if request.method == 'POST':
-        if not current_user.is_authenticated:
-            return redirect(url_for('index'))
-        form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
-        if form.validate():
-            episode = Episode(
-                name=form.title.data,
-                user_id=current_user.get_id()
-            )
-            upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
-            static_path = app.config['MEDIA_ROOT']
-            path = f'{static_path}{upload_folder}'
-            if not os.path.exists(path):
-                os.mkdir(path)
-            db.session.add(episode)
-            db.session.flush()
-            db.session.commit()
-            episode_path = os.path.join(path, f'{episode.id}.mp3')
-            form.file.data.save(episode_path)
-            episode.generate_wrapped_file(episode_path)
-    return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
-
-
-@app.route('/user/<username>')
-@login_required
-def profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    episodes = Episode.query.filter_by(user_id=user.id)
-    jokes = Joke.query
-    return render_template('profile.html', user=user, joks=jokes, episodes=episodes)
-
-
 @app.route('/jokes/edit_joke/<joke_id>', methods=['GET', 'POST'])
+@admin_required
 def edit_joke(joke_id):
     form = EditJokeForm()
     joke = Joke.query.filter_by(id=joke_id).first_or_404()
@@ -134,60 +131,103 @@ def edit_joke(joke_id):
         joke.generate_wrapped_file()
 
         flash('Ваши изменения сохранены!')
-        return redirect(url_for('profile', username=current_user.username))
+        return redirect(url_for('profile'))
     elif request.method == "GET":
         form.text.data = joke.joke_text
     return render_template('edit_joke.html', form=form)
 
 
 @app.route('/jokes/delete_joke/<joke_id>', methods=['GET', 'POST'])
+@admin_required
 def delete_joke(joke_id):
     joke = Joke.query.filter_by(id=joke_id).first_or_404()
     db.session.delete(joke)
     db.session.commit()
+    os.remove(joke.get_file_path())
     flash("Успешно удалено")
-    return redirect(url_for('profile', username=current_user.username))
+    return redirect(url_for('profile'))
 
 
-@app.route('/user/edit_profile/<username>', methods=['GET', 'POST'])
-def edit_profile(username):
-    form = EditUserProfileForm()
-    user = User.query.filter_by(username=username).first_or_404()
-    if form.validate_on_submit():
-        if current_user.id == user.id:
-            if user.check_password(form.old_password.data):
-                user.username = form.username.data
-                user.set_password(form.password.data)
-                db.session.add(user)
-                db.session.commit()
-                flash('Ваши изменения сохранены!')
-                return redirect(url_for('profile', username=user.username))
-            else:
-                flash("Старый пароль неверный")
-                return redirect(url_for("/user/edit_profile/", username=user.username))
+# user section
+
+@app.route('/user')
+@login_required
+def profile():
+    user = current_user
+    episodes = Episode.query.filter_by(user_id=user.id)
+    jokes = Joke.query
+    return render_template('profile.html', user=user, joks=jokes, episodes=episodes)
+
+
+@app.route('/user/edit_profile', methods=['GET'])
+@login_required
+def edit_profile():
+    user = current_user
+    edit_username_form = EditUserNameForm()
+    edit_password_form = EditUserPasswordForm()
+    edit_username_form.username.data = user.username
+    return render_template('profile_edit.html',
+                           edit_username_form=edit_username_form,
+                           edit_password_form=edit_password_form)
+
+
+@app.route('/user/edit/username', methods=['POST'])
+@login_required
+def user_edit_username():
+    user = current_user
+    edit_username_form = EditUserNameForm()
+    if edit_username_form.validate_on_submit():
+        username = edit_username_form.username.data
+        password = edit_username_form.password.data
+
+        if user.check_password(password):
+            user.username = username
+            db.session.add(user)
+            db.session.commit()
+            flash('Ваши изменения сохранены!')
+            return redirect(url_for('profile'))
         else:
-            flash('Доступ запрещён')
-    elif request.method == "GET":
-        form.username.data = user.username
-    return render_template('edit_joke.html', form=form)
+            flash('Пароль неверный')
+            return redirect(url_for('edit_profile'))
+    flash('Неверные данные')
+    return redirect(url_for('edit_profile'))
 
+
+@app.route('/user/edit/password', methods=['POST'])
+@login_required
+def user_edit_password():
+    user = current_user
+    edit_password_form = EditUserPasswordForm()
+    if edit_password_form.validate_on_submit():
+        password = edit_password_form.password.data
+        old_password = edit_password_form.old_password.data
+
+        if user.check_password(old_password):
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+            flash('Ваши изменения сохранены!')
+            return redirect(url_for('profile'))
+        else:
+            flash('Пароль неверный')
+            return redirect(url_for('edit_profile'))
+    flash('Неверные данные')
+    return redirect(url_for('edit_profile'))
+
+
+# feed section
 
 @app.route('/feed')
 def feed_view():
-    """
-    comparing rss file and database for Episodes
-    and generate new rss file, or not
-    :return: template.xml
-    """
-    p = RssPodcast()
-    if p.are_not_equal():
-        p.sync_episodes()
-        print('sdf')
-        p.rss_file(p.file.as_posix())
-        print('xcvxvc')
-    return render_template('feed_template.xml')
+    feed = get_rss_feed()
+    return feed, 200
 
 
-@app.route('/media/episodes/<path:path>')
-def send_js(path):
+@app.route('/episodes/<path:path>')
+def episodes(path):
     return send_from_directory(os.path.join('..', app.config['MEDIA_ROOT'], 'episodes'), path)
+
+
+@app.route('/jokes/<path:path>')
+def jokes(path):
+    return send_from_directory(os.path.join('..', app.config['MEDIA_ROOT'], 'jokes'), path)

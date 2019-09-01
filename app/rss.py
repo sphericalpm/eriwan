@@ -1,14 +1,9 @@
-import xml.etree.ElementTree as ET
-
-from pathlib import Path
-from podgen import Podcast, Episode, Person, Media
-
+from podgen import Podcast, Media, Episode, Person
 from flask import Response
+
 from app import app
-
+from app.models import get_random_jokes_from_db, get_all_episodes
 from . import models
-
-file = Path('app/templates/feed_template.xml')
 
 
 class RssResponse(Response):
@@ -19,44 +14,46 @@ class RssResponse(Response):
         return super().__init__(response, **kwargs)
 
 
-class RssPodcast(Podcast):
-    """
-    Custom class for comfortable work with the Podcast
-    """
+podcast = Podcast(name="Eriwan_Podcast",
+                  description='Eriwan_Podcast',
+                  website=app.config.get('HOST', 'localhost'),
+                  explicit=True)
 
-    def __init__(self):
-        super().__init__()
-        self.name = "Eriwan_Podcast"
-        self.explicit = True
-        self.description = 'Eriwan_Podcast'
-        self.website = app.config.get('HOST', 'localhost')
-        self.file = file
 
-        if not self.file.exists():
-            self.rss_file(self.file.as_posix())
+def get_rss_feed():
+    episodes = get_episodes()
+    length = len(episodes)
+    jokes = get_jokes_episodes(length)
+    podcast.episodes = []
+    for i in range(length):
+        podcast.episodes.append(jokes[i % len(jokes)])
+        podcast.episodes.append(episodes[i])
+    return podcast.rss_str()
 
-    def are_not_equal(self):
-        all_eps = models.Episode.query.count()
-        file_entries = self.get_number_file_entries()
-        return all_eps != file_entries
 
-    def get_number_file_entries(self):
-        if self.file.exists():
-            tree = ET.parse(self.file.absolute())
-            root = tree.getroot()
-            return len([i.tag for i in root.iter('item')])
+def convert_episode(episode):
+    podcast_episode = Episode()
+    podcast_episode.title = episode.name
+    podcast_episode.link = str(episode.get_link())
+    podcast_episode.media = Media(url=podcast_episode.link, type='mp3')
+    user = models.User.query.filter_by(id=episode.user_id).first()
+    podcast_episode.authors = [Person(name=user.username, email=user.email)]
+    return podcast_episode
 
-    def sync_episodes(self):
-        [self.episodes.remove(ep) for ep in self.episodes]
-        query = models.Episode.query.all()
-        for ep in query:
-            user = models.User.query.filter_by(id=ep.user_id).first()
-            email = user.email
-            pdg_ep = Episode()
-            pdg_ep.title = ep.name
-            pdg_ep.link = str(ep.get_link())
-            pdg_ep.media = Media(url=pdg_ep.link, type='mp3')
-            pdg_ep.authors = [
-                Person(name=user.username,
-                       email=email)] if not user.is_admin else []
-            self.add_episode(pdg_ep)
+
+def get_episodes():
+    episodes = get_all_episodes()
+    return list(map(convert_episode, episodes))
+
+
+def convert_joke_to_podcast_episode(joke):
+    podcast_joke = Episode()
+    podcast_joke.title = str(joke.id)
+    podcast_joke.link = str(joke.get_link())
+    podcast_joke.media = Media(url=podcast_joke.link, type='mp3')
+    return podcast_joke
+
+
+def get_jokes_episodes(limit):
+    jokes = get_random_jokes_from_db(limit)
+    return list(map(convert_joke_to_podcast_episode, jokes))
