@@ -147,6 +147,7 @@ def delete_joke(joke_id):
     joke = Joke.query.filter_by(id=joke_id).first_or_404()
     db.session.delete(joke)
     db.session.commit()
+    os.remove(joke.get_file_path())
     flash("Успешно удалено")
     return redirect(url_for('profile', username=current_user.username))
 
