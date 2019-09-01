@@ -13,9 +13,10 @@ from app.utils import admin_required
 
 @app.route('/')
 def index():
-    feed_blank = 'Podcast Main page: RSS feed'
-    form = EpisodeUploadForm()
-    return render_template('index.html', feed_blank=feed_blank, form=form)
+    if current_user.is_authenticated:
+        return redirect(url_for('upload_podcast_get'))
+    return redirect(url_for('login'))
+
 
 
 @app.route("/register", methods=['GET', 'POST'])
