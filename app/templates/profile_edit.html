@@ -1,7 +1,11 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block content %}
-    <div class="center-block mt-5">
-    {{ wtf.quick_form(form) }}
+{{super()}}
+<div class="center-block mt-5">
+    {{ wtf.quick_form(edit_username_form, url_for('user_edit_username')) }}
+</div>
+<div class="center-block mt-5">
+    {{ wtf.quick_form(edit_password_form, url_for('user_edit_password')) }}
 </div>
 {% endblock %}

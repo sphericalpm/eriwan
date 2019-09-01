@@ -7,6 +7,13 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app.models import User
 
 
+def validate_username_does_not_exist(username):
+    user = User.query.filter_by(username=username.data).first()
+    if user:
+        raise ValidationError('Это имя пользователя уже занято. Пожалуйста \
+                выберите другое.')
+
+
 class RegistrationForm(FlaskForm):
     username = StringField(
         'Имя пользователя',
@@ -35,10 +42,7 @@ class RegistrationForm(FlaskForm):
 
     @staticmethod
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('Это имя пользователя уже занято. Пожалуйста \
-            выберите другое.')
+        validate_username_does_not_exist(username)
 
     @staticmethod
     def validate_email(self, email):
@@ -71,13 +75,26 @@ class EditJokeForm(FlaskForm):
     submit = SubmitField("Редактировать")
 
 
-class EditUserProfileForm(FlaskForm):
+class EditUserNameForm(FlaskForm):
     username = StringField(
         'Имя пользователя',
         render_kw={"placeholder": "Новое имя пользователя"},
         validators=[
             DataRequired(),
             Length(min=2, max=64)])
+    password = PasswordField(
+        'Пароль',
+        validators=[
+            DataRequired(),
+            Length(min=3, max=25)])
+    submit = SubmitField('Редактировать имя')
+
+    @staticmethod
+    def validate_username(self, username):
+        validate_username_does_not_exist(username)
+
+
+class EditUserPasswordForm(FlaskForm):
     old_password = PasswordField(
         'Старый пароль',
         validators=[
@@ -94,7 +111,7 @@ class EditUserProfileForm(FlaskForm):
             DataRequired(),
             Length(min=3, max=25),
             EqualTo('password')])
-    submit = SubmitField('Редактировать')
+    submit = SubmitField('Редактировать пароль')
 
 
 class EpisodeUploadForm(FlaskForm):
