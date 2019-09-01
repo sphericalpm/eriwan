@@ -97,3 +97,14 @@ class Joke(db.Model):
 
 def get_random_jokes_from_db(number=1):
     return Joke.query.order_by(sqlalchemy.func.random()).limit(number)
+
+
+def check_database_schema_existence():
+    try:
+        test_user_id = 1
+        User.query.get(test_user_id)
+    except sqlalchemy.exc.OperationalError:
+        db.create_all()
+
+
+check_database_schema_existence()
