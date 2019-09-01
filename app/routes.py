@@ -6,7 +6,7 @@ from werkzeug.urls import url_parse
 
 from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EpisodeUploadForm, \
 from app.models import User, Joke, Episode
-from app.rss import RssPodcast
+from app.rss import get_rss_feed
 from app import app, db
 from app.utils import admin_required
 
@@ -175,20 +175,15 @@ def edit_profile(username):
 
 @app.route('/feed')
 def feed_view():
-    """
-    comparing rss file and database for Episodes
-    and generate new rss file, or not
-    :return: template.xml
-    """
-    p = RssPodcast()
-    if p.are_not_equal():
-        p.sync_episodes()
-        print('sdf')
-        p.rss_file(p.file.as_posix())
-        print('xcvxvc')
-    return render_template('feed_template.xml')
+    feed = get_rss_feed()
+    return feed, 200
 
 
-@app.route('/media/episodes/<path:path>')
-def send_js(path):
+@app.route('/episodes/<path:path>')
+def episodes(path):
     return send_from_directory(os.path.join('..', app.config['MEDIA_ROOT'], 'episodes'), path)
+
+
+@app.route('/jokes/<path:path>')
+def jokes(path):
+    return send_from_directory(os.path.join('..', app.config['MEDIA_ROOT'], 'jokes'), path)

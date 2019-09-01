@@ -1,17 +1,18 @@
 import os
-from pathlib import Path
 
+import sqlalchemy
+from flask import url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 from app import app, db, login_manager
 from .audio_utils import concatenate_audios, text_to_speech
 
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True,
-                         unique=True, nullable=False)
-    email = db.Column(db.String(120), index=True, unique=True, nullable=False)
+    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    email = db.Column(db.String(120), index=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
@@ -44,9 +45,12 @@ class Episode(db.Model):
             return file_path
 
     def get_link(self):
-        static = app.config.get('STATIC_ROOT') + f'{self.id}.mp3'
         host = app.config.get('HOST', 'localhost:5000')
-        return f'http://{host}/{Path(static).as_posix()}'
+        return f"http://{host}{url_for('episodes', path=f'{self.id}.mp3')}"
+
+
+def get_all_episodes():
+    return Episode.query.all()
 
 
 class Joke(db.Model):
@@ -67,8 +71,7 @@ class Joke(db.Model):
         Return wrapped in jingles file path
         '''
 
-        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes')
-        file_path = f'{media_path}/{self.id}.mp3'
+        file_path = os.path.join(app.config.get('MEDIA_ROOT'), 'jokes', f'{self.id}.mp3')
         if os.path.exists(file_path):
             return file_path
 
@@ -81,8 +84,16 @@ class Joke(db.Model):
         if not os.path.exists(media_path):
             os.makedirs(media_path)
 
-        file_path = text_to_speech(self.joke_text)
+        joke_audio_file = text_to_speech(self.joke_text)
         concatenate_audios([self.jingle_file_path(),
-                            file_path,
+                            joke_audio_file,
                             self.jingle_file_path()],
-                           f'{media_path}/{self.id}.mp3')
+                           os.path.join(media_path, f'{self.id}.mp3'))
+
+    def get_link(self):
+        host = app.config.get('HOST', 'localhost:5000')
+        return f"http://{host}{url_for('jokes', path=f'{self.id}.mp3')}"
+
+
+def get_random_jokes_from_db(number=1):
+    return Joke.query.order_by(sqlalchemy.func.random()).limit(number)
