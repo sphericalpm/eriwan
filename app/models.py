@@ -39,26 +39,9 @@ class Episode(db.Model):
         return f'<Episode id: {self.id}>, name: {self.name}'
 
     def get_file_path(self):
-        '''
-        Return wrapped in jingles file path
-        '''
-        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
-        file_path = f'{media_path}/{self.id}.mp3'
+        file_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes', f'{self.id}.mp3')
         if os.path.exists(file_path):
             return file_path
-
-    # todo: add to celery task
-    def generate_wrapped_file(self, episode_path):
-        """
-        Concatenate an episode name mp3 file and an episode mp3 file
-        :param episode_path: path to episode mp3
-        """
-        media_path = os.path.join(app.config.get('MEDIA_ROOT'), 'episodes')
-        if not os.path.exists(media_path):
-            os.makedirs(media_path)
-        temp_path = text_to_speech(self.name)
-        concatenate_audios([temp_path, episode_path],
-                           f'{media_path}/{self.id}.mp3')
 
     def get_link(self):
         static = app.config.get('STATIC_ROOT') + f'{self.id}.mp3'

@@ -98,8 +98,9 @@ class EditUserProfileForm(FlaskForm):
 
 
 class EpisodeUploadForm(FlaskForm):
-    file = FileField('Upload podcast', validators=[
+    title = StringField('Имя подкаста', validators=[DataRequired()])
+    file = FileField('Аудиофайл', validators=[
         FileRequired(),
         FileAllowed(['mp3'], "Wrong format! Only mp3 format audio files")
     ])
-    title = StringField('Имя подкаста', validators=[DataRequired()])
+    submit = SubmitField('Загрузить подкаст')

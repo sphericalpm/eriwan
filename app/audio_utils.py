@@ -26,3 +26,10 @@ def concatenate_audios(path_list, out_path):
     for audio_path in path_list:
         res += AudioSegment.from_mp3(audio_path)
     res.export(out_path, format='mp3')
+
+
+def prepend_intro_text_and_save(audio_file, intro_text, output_path):
+    intro_audio = AudioSegment.from_mp3(text_to_speech(intro_text))
+    base_audio = AudioSegment.from_mp3(audio_file)
+    result = intro_audio + base_audio
+    result.export(output_path, format='mp3')

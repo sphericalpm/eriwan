@@ -3,9 +3,8 @@ import os
 from flask import render_template, url_for, flash, redirect, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from werkzeug.datastructures import CombinedMultiDict
 
-from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EditUserProfileForm, EpisodeUploadForm
+from app.forms import RegistrationForm, UploadJokeForm, LoginForm, EditJokeForm, EpisodeUploadForm, \
 from app.models import User, Joke, Episode
 from app.rss import RssPodcast
 from app import app, db
@@ -60,6 +59,34 @@ def logout():
     return redirect(url_for('index'))
 
 
+# podcast section
+
+@app.route('/upload_podcast', methods=['GET'])
+def upload_podcast_get():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'))
+    episode_upload_form = EpisodeUploadForm()
+    return render_template('upload_podcast.html', form=episode_upload_form, feed_blank='Podcast Main page: RSS feed')
+
+
+@app.route('/upload_podcast', methods=['POST'])
+@login_required
+def upload_podcast_post():
+    form = EpisodeUploadForm()
+    if form.validate():
+        episode = Episode(name=form.title.data,
+                          user_id=current_user.get_id())
+        db.session.add(episode)
+        db.session.flush()
+        db.session.commit()
+        prepend_intro_text_and_save(form.file.data, form.title.data, episode.get_file_path())
+        flash('Подкаст загружен')
+        redirect(url_for('index'))
+    else:
+        flash('Неверные данные')
+    return redirect(url_for('upload_podcast_get'))
+
+
 @app.route('/add_joke', methods=['GET', 'POST'])
 @admin_required
 def add_joke_template():
@@ -83,32 +110,6 @@ def add_joke_template():
     return render_template('add_joke.html', form=form)
 
 
-@app.route('/upload-podcast', methods=['GET', 'POST'])
-def upload_podcast_handle():
-    if not current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = EpisodeUploadForm()
-    if request.method == 'POST':
-        if not current_user.is_authenticated:
-            return redirect(url_for('index'))
-        form = EpisodeUploadForm(CombinedMultiDict((request.files, request.form)))
-        if form.validate():
-            episode = Episode(
-                name=form.title.data,
-                user_id=current_user.get_id()
-            )
-            upload_folder = app.config['UPLOAD_PODCAST_FOLDER']
-            static_path = app.config['MEDIA_ROOT']
-            path = f'{static_path}{upload_folder}'
-            if not os.path.exists(path):
-                os.mkdir(path)
-            db.session.add(episode)
-            db.session.flush()
-            db.session.commit()
-            episode_path = os.path.join(path, f'{episode.id}.mp3')
-            form.file.data.save(episode_path)
-            episode.generate_wrapped_file(episode_path)
-    return render_template('upload_podcast.html', form=form, feed_blank='Podcast Main page: RSS feed')
 
 
 @app.route('/user/<username>')
